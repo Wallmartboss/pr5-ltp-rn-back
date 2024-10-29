@@ -1,0 +1,19 @@
+description: Successful operation. The contact details are returned
+content:
+  application/json:
+    schema:
+      type: object
+      required:
+        - status
+        - message
+        - data
+      properties:
+        status:
+          type: integer
+          example: 200
+        message:
+          type: string
+          example: Successfully found contact with id 66d8e23bd18ecacf8d38c37c!
+        data:
+          type: object
+          $ref: '../schemas/contact.yaml'
