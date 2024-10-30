@@ -1,29 +1,29 @@
-const parseType = (type) => {
-  const isString = typeof type === 'string';
-  if (!isString) return null;
-  const isType = (type) => ['work', 'home', 'personal'].includes(type);
+// const parseType = (type) => {
+//   const isString = typeof type === 'string';
+//   if (!isString) return null;
+//   const isType = (type) => ['work', 'home', 'personal'].includes(type);
 
-  if (isType(type)) return type;
-};
+//   if (isType(type)) return type;
+// };
 
-const parseFavourite = (isFavourite) => {
-  if (typeof isFavourite === 'string') {
-    return isFavourite === 'true';
-  }
+// const parseFavourite = (isFavourite) => {
+//   if (typeof isFavourite === 'string') {
+//     return isFavourite === 'true';
+//   }
 
-  const isBoolean = typeof isFavourite === 'boolean';
-  if (!isBoolean) return null;
+//   const isBoolean = typeof isFavourite === 'boolean';
+//   if (!isBoolean) return null;
 
-  return isFavourite;
-};
-export const parseFilterParams = (query) => {
-  const { type, isFavourite } = query;
+//   return isFavourite;
+// };
+// export const parseFilterParams = (query) => {
+//   const { type, isFavourite } = query;
 
-  const parsedType = parseType(type);
-  const parsedFavourite = parseFavourite(isFavourite);
+//   const parsedType = parseType(type);
+//   const parsedFavourite = parseFavourite(isFavourite);
 
-  return {
-    type: parsedType,
-    isFavourite: parsedFavourite,
-  };
-};
+//   return {
+//     type: parsedType,
+//     isFavourite: parsedFavourite,
+//   };
+// };
