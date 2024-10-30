@@ -1,7 +1,7 @@
 {
-  "name": "nodejs-hw-mongodb",
-  "version": "1.0.0",
-  "description": "nodejs-hw-mongodb",
+  "name": "pr5-ltp-rn-back",
+  "version": "0.1.0",
+  "description": "pr5-ltp-rn-back",
   "type": "module",
   "main": "index.js",
   "scripts": {
