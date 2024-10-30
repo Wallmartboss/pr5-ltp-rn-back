@@ -1,6 +1,6 @@
-description: Unauthorized error
+description: Conflict error
 content:
-  application/json:
+  aplication/json:
     schema:
       type: object
       required:
@@ -10,10 +10,10 @@ content:
       properties:
         status:
           type: integer
-          example: 401
+          example: 400
         message:
           type: string
-          example: UnauthorizedError
+          example: ConflictError
         data:
           type: object
           required:
@@ -21,4 +21,4 @@ content:
           properties:
             message:
               type: string
-              example: 'Access token expired'
+              example: 'Invalid password format or email.'

@@ -1,33 +1,33 @@
 openapi: 3.1.0
 info:
   version: 1.0.0
-  title: Contacts app
+  title: Task Pro app
   license:
     name: Apache 2.0
     url: http://www.apache.org/licenses/LICENSE-2.0.html
-  description: This is a documentation of contacts app from 7-th homework of Node.js course
+  description: This is a documentation of Task Pro app.
 tags:
-  - name: Contacts
-    description: Operations about contacts.
   - name: Auth
     description: Auth operations.
+  - name: User
+    description: User profile and settings operations.
+  - name: Boards
+    description: Operations for managing boards, columns, and cards.
+  - name: Theme
+    description: Operations for changing and saving user theme settings.
 servers:
-  - url: http://localhost:3000
+  - url: http://127.0.0.1:3000
   - url: https://pr5-ltp-rn-back.onrender.com
 paths:
-  /contacts:
-    get:
-      $ref: ../swagger/paths/contacts/get.yaml
+  /auth/register:
     post:
-      $ref: ../swagger/paths/contacts/post.yaml
-
-  /contacts/{id}:
-    get:
-      $ref: ../swagger/paths/contacts/{id}/get.yaml
-    patch:
-      $ref: ../swagger/paths/contacts/{id}/patch.yaml
-    delete:
-      $ref: ../swagger/paths/contacts/{id}/delete.yaml
+      $ref: ../swagger/paths/auth/register.yaml
+  /auth/login:
+    post:
+      $ref: ../swagger/paths/auth/login.yaml
+  /auth/logout:
+    post:
+      $ref: ../swagger/paths/auth/logout.yaml
 components:
   securitySchemes:
     bearerAuth:
