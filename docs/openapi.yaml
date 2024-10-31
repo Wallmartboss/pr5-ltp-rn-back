@@ -13,8 +13,8 @@ tags:
     description: User profile and settings operations.
   - name: Boards
     description: Operations for managing boards, columns, and cards.
-  - name: Theme
-    description: Operations for changing and saving user theme settings.
+  # - name: Theme
+  #   description: Operations for changing and saving user theme settings.
 servers:
   - url: http://127.0.0.1:3000
   - url: https://pr5-ltp-rn-back.onrender.com
@@ -28,6 +28,15 @@ paths:
   /auth/logout:
     post:
       $ref: ../swagger/paths/auth/logout.yaml
+  /users/current:
+    get:
+      $ref: ../swagger/paths/users/current.yaml
+  /users/{userId}:
+    patch:
+      $ref: ../swagger/paths/users/update.yaml
+  /users/themes:
+    patch:
+      $ref: ../swagger/paths/users/themes.yaml
 components:
   securitySchemes:
     bearerAuth:

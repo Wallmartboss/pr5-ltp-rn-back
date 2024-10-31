@@ -1,0 +1,46 @@
+tags:
+  - User
+summary: Update theme
+operationId: uodateTheme
+description: 'Update the selected theme in the user profile'
+security:
+  - bearerAuth: []
+requestBody:
+  content:
+    application/json:
+      schema:
+        type: object
+        required:
+          - theme
+        properties:
+          theme:
+            description: "User's theme"
+            type: string
+            enum: ['light', 'dark', 'violet']
+            example: 'dark'
+            default: 'dark'
+responses:
+  '200':
+    description: Successfully updated theme settings.
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - status
+            - message
+            - data
+          properties:
+            status:
+              type: integer
+              example: 200
+            message:
+              type: string
+              example: 'Theme updated successfully!'
+            data:
+              type: object
+              example: 'dark'
+  '401':
+    $ref: '../../components/responses/401.yaml'
+  '500':
+    $ref: '../../components/responses/500.yaml'
