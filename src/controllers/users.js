@@ -1,45 +1,10 @@
 
 import createHttpError from 'http-errors';
-import { ONE_DAY } from '../constants/index.js';
 import { env } from "../utils/env.js";
 import { saveFileToCloudinary } from '../utils/saveFileToCloudinary.js';
 import { saveFileToUploadDir } from '../utils/saveFileToUploadDir.js';
-import { loginUser, logoutUser, registerUser, updateTheme, updateUser } from '../services/user.js';
-export const registerUserController = async (req, res) => {
-  const user = await registerUser(req.body);
+import { updateTheme, updateUser } from '../services/users.js';
 
-  res.status(201).json({
-    status: 201,
-    message: 'Successfully registered a user!',
-    data: user,
-  });
-};
-
-export const loginUserController = async (req, res) => {
-  const session = await loginUser(req.body);
-  res.cookie('sessionId', session._id, {
-    httpOnly: true,
-    expires: new Date(Date.now() + ONE_DAY),
-  });
-
-  res.json({
-    status: 200,
-    message: 'Successfully logged in an user!',
-    data: {
-      accessToken: session.accessToken,
-    },
-  });
-};
-
-export const logoutUserController = async (req, res) => {
-  if (req.cookies.sessionId) {
-    await logoutUser(req.cookies.sessionId);
-  }
-
-  res.clearCookie('sessionId');
-
-  res.status(204).send();
-};
 export const getCurrentUserController = async (req, res) => {
   if (req.user) {
     res.json({
