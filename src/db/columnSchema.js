@@ -7,7 +7,7 @@ const columnSchema = new Schema(
     },
     owner: {
       type: Schema.Types.ObjectId,
-      ref: 'Dashboard',
+      ref: 'Board',
       required: true,
     },
   },

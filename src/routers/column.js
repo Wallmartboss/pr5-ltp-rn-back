@@ -13,7 +13,7 @@ import { isValidId } from '../middlewares/isValidId.js';
 const columnsRouter = express.Router();
 
 columnsRouter.post(
-  '/:dashboardId',
+  '/:boardId',
   authenticate,
   isValidId,
   validateBody(columnSchema, `missing fields`),
