@@ -1,9 +1,8 @@
 import { Router } from 'express';
-import userRouter from './user.js';
 
+import columnsRouter from './column.js';
 const router = Router();
 
-router.use('/user', userRouter);
-app.use("/columns", columnsRouter)
+router.use('/columns', columnsRouter);
 
 export default router;

@@ -1,7 +1,4 @@
-const { Schema, model } = require("mongoose");
-
-
-
+import { model, Schema } from 'mongoose';
 const columnSchema = new Schema(
   {
     title: {
@@ -10,15 +7,11 @@ const columnSchema = new Schema(
     },
     owner: {
       type: Schema.Types.ObjectId,
-      ref: "Dashboard",
+      ref: 'Dashboard',
       required: true,
     },
   },
-  { versionKey: false, timestamps: true }
+  { versionKey: false, timestamps: true },
 );
 
-
-
-const Column = model("Column", columnSchema);
-
-module.exports = Column;
+export const Column = model('Column', columnSchema);

@@ -1,4 +1,4 @@
-import { Column } from '../db/columnSchema';
+import { Column } from '../db/columnSchema.js';
 
 import createError from 'http-errors';
 

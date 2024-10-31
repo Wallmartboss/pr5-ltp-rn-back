@@ -1,10 +1,14 @@
 import express from 'express';
-import { authenticate } from '../middlewares/authenticate';
-import { validateBody } from '../middlewares/validateBody';
-import { columnSchema } from '../db/columnSchema';
-import { deleteById, postColumn, updateById } from '../controllers/columnController';
+import { authenticate } from '../middlewares/authenticate.js';
+import { validateBody } from '../middlewares/validateBody.js';
+import { columnSchema } from '../validation/column.js';
+import {
+  deleteById,
+  postColumn,
+  updateById,
+} from '../controllers/columnController.js';
 
-import { isValidId } from '../middlewares/isValidId';
+import { isValidId } from '../middlewares/isValidId.js';
 
 const columnsRouter = express.Router();
 
