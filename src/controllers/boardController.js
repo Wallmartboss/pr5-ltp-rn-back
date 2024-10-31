@@ -1,10 +1,22 @@
 import createHttpError from 'http-errors';
 import {
+  getAllBoards,
   getBoardById,
   createBoard,
   updateBoard,
   deleteBoard,
 } from '../services/board.js';
+
+export const getAllBoardsController = async (req, res) => {
+  try {
+    const userId = req.user.id; // ID юзера з middleware authenticate
+    const boards = await getAllBoards(userId);
+    res.json(boards);
+  } catch (error) {
+    console.error('Error in getAllBoardsController:', error);
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
+};
 
 export const getBoardByIdController = async (req, res) => {
   try {
@@ -24,13 +36,13 @@ export const getBoardByIdController = async (req, res) => {
 
 export const createBoardController = async (req, res) => {
   try {
-    const { title, background, icon, owner } = req.body; // Отримуємо дані з тіла запиту
-
+    const { title, background, icon } = req.body; // Отримуємо дані з тіла запиту
+    const owner = req.user.id;
     const newBoard = await createBoard({
       title,
       background: background || '',
       icon: icon || '',
-      owner: owner /* || null */, // Додаємо owner (може бути null) для перевірки в постмен
+      owner /* || null */, // Додаємо owner (може бути null) для перевірки в постмен
     });
 
     res.status(201).json(newBoard);

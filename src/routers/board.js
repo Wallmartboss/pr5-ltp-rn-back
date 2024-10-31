@@ -1,6 +1,7 @@
 import { Router } from 'express';
 
 import {
+  getAllBoardsController,
   getBoardByIdController,
   createBoardController,
   updateBoardController,
@@ -14,10 +15,18 @@ import { createBoardSchema, updateBoardSchema } from '../validation/board.js';
 
 const boardsRouter = Router();
 
-boardsRouter.get('/:id', ctrlWrapper(getBoardByIdController));
+boardsRouter.get('/', authenticate, ctrlWrapper(getAllBoardsController));
+
+boardsRouter.get(
+  '/:id',
+  authenticate,
+  authorizeUserBoards,
+  ctrlWrapper(getBoardByIdController),
+); // додала щоб лише власник дошки міг її отримати за id
 
 boardsRouter.post(
   '/',
+  authenticate,
   validateBody(createBoardSchema),
   ctrlWrapper(createBoardController),
 );

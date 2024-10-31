@@ -1,6 +1,12 @@
 import Board from '../db/board.js';
 import createHttpError from 'http-errors';
 
+// Отримуємо всі дошки
+export const getAllBoards = async (userId) => {
+  const boards = await Board.find({ owner: userId }).populate('columns'); //тут ще може таски треба додати
+  return boards;
+};
+
 // Отримуєм дошку за ID
 export const getBoardById = async (id) => {
   console.log(`Fetching board with ID: ${id}`);
