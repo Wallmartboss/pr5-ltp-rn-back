@@ -10,6 +10,8 @@ import {
 export const getAllBoardsController = async (req, res) => {
   try {
     const userId = req.user.id; // ID юзера з middleware authenticate
+    console.log('User ID:', userId);
+
     const boards = await getAllBoards(userId);
     res.json(boards);
   } catch (error) {
@@ -53,12 +55,14 @@ export const createBoardController = async (req, res) => {
 
 export const updateBoardController = async (req, res) => {
   try {
+    // з сервіс для оновлення викликаю функцію
     const updatedBoard = await updateBoard(req.params.id, req.body);
     res.json(updatedBoard);
   } catch (error) {
     if (error instanceof createHttpError.HttpError) {
       res.status(error.status).json({ message: error.message });
     } else {
+      console.error('Error in updateBoardController:', error);
       res.status(500).json({ message: 'Internal Server Error' });
     }
   }

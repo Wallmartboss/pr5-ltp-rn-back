@@ -3,14 +3,15 @@ import createHttpError from 'http-errors';
 
 // Отримуємо всі дошки
 export const getAllBoards = async (userId) => {
-  const boards = await Board.find({ owner: userId }).populate('columns'); //тут ще може таски треба додати
+  console.log('Fetching boards for user ID:', userId);
+  const boards = await Board.find({ owner: userId }); /* .populate('columns') */ //тут ще може таски треба додати
   return boards;
 };
 
 // Отримуєм дошку за ID
 export const getBoardById = async (id) => {
   console.log(`Fetching board with ID: ${id}`);
-  const board = await Board.findById(id).populate('columns'); //закомент.якщо не потрібні дані колонок у відповіді
+  const board = await Board.findById(id); /* .populate('columns') */ //закомент.якщо не потрібні дані колонок у відповіді
   if (!board) {
     throw createHttpError(404, 'Board not found');
   }
@@ -32,16 +33,19 @@ export const createBoard = async (data) => {
 
 // Оновляєм дошку за ID
 export const updateBoard = async (id, data) => {
+  // Знаходимо дошку за ID
   const board = await Board.findById(id);
   if (!board) {
     throw createHttpError(404, 'Board not found');
   }
 
-  // Оновлення полів, якщо вони надані в даних
-  board.title = data.title || board.title;
-  board.background = data.background || board.background;
-  board.icon = data.icon || board.icon;
+  Object.assign(board, {
+    title: data.title ?? board.title,
+    background: data.background ?? board.background,
+    icon: data.icon ?? board.icon,
+  });
 
+  // Зберігаємо оновлену дошку і повертаєм
   await board.save();
   return board;
 };
