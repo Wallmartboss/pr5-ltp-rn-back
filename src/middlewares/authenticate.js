@@ -1,9 +1,6 @@
-
-
 import createHttpError from 'http-errors';
 import { UsersCollection } from '../db/user.js';
 import { SessionsCollection } from '../db/session.js';
-
 
 export const authenticate = async (req, res, next) => {
 
