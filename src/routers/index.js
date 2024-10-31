@@ -1,11 +1,9 @@
-// import { Router } from 'express';
-// import contactsRouter from './contacts.js';
-// import authRouter from './auth.js';
+import { Router } from 'express';
+import userRouter from './user.js';
 
-// const router = Router();
+const router = Router();
 
-// router.use('/contacts', contactsRouter);
-// router.use('/auth', authRouter);
+router.use('/user', userRouter);
 
 // export default router;
 
@@ -15,4 +13,5 @@ import boardsRouter from './board.js';
 const router = Router();
 router.use('/boards', boardsRouter);
 
+export default router;
 export default router;
