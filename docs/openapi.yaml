@@ -13,7 +13,7 @@ tags:
     description: User profile and settings operations.
   - name: Boards
     description: Operations for managing boards.
-  - name: columns
+  - name: Columns
     description: Operations for managing columns.
   - name: Tasks
     description: Operations for managing tasks.
