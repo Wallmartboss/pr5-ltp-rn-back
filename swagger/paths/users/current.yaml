@@ -1,0 +1,34 @@
+tags:
+  - User
+summary: Retrieve current user profile
+operationId: getCurrentUser
+description: 'Fetch the profile details of the currently authenticated user.'
+security:
+  - bearerAuth: []
+responses:
+  '200':
+    description: Successfully retrieved the user profile.
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - status
+            - message
+            - data
+          properties:
+            status:
+              type: integer
+              example: 200
+            message:
+              type: string
+              example: 'Successfully retrieved user profile.'
+            data:
+              type: object
+              $ref: '../../components/schemas/user.yaml'
+  '401':
+    $ref: '../../components/responses/401.yaml'
+  '404':
+    $ref: '../../components/responses/404.yaml'
+  '500':
+    $ref: '../../components/responses/500.yaml'
