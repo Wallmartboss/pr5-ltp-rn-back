@@ -12,9 +12,11 @@ tags:
   - name: User
     description: User profile and settings operations.
   - name: Boards
-    description: Operations for managing boards, columns, and cards.
-  # - name: Theme
-  #   description: Operations for changing and saving user theme settings.
+    description: Operations for managing boards.
+  - name: columns
+    description: Operations for managing columns.
+  - name: Tasks
+    description: Operations for managing tasks.
 servers:
   - url: http://127.0.0.1:3000
   - url: https://pr5-ltp-rn-back.onrender.com
