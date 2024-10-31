@@ -3,7 +3,6 @@ import { UsersCollection } from '../db/user.js';
 import { SessionsCollection } from '../db/session.js';
 
 export const authenticate = async (req, res, next) => {
-
   const authHeader = req.get('Authorization');
 
   if (!authHeader) {
@@ -22,7 +21,8 @@ export const authenticate = async (req, res, next) => {
     return next(createHttpError(401, 'Session not found'));
   }
 
-  const isAccessTokenExpired = new Date() > new Date(session.accessTokenValidUntil);
+  const isAccessTokenExpired =
+    new Date() > new Date(session.accessTokenValidUntil);
 
   if (isAccessTokenExpired) {
     return next(createHttpError(401, 'Access token expired'));
@@ -37,5 +37,4 @@ export const authenticate = async (req, res, next) => {
   req.user = user;
 
   next();
-
 };
