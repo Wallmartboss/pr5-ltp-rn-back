@@ -22,13 +22,11 @@ const boardSchema = new Schema(
     columns: [
       {
         type: Schema.Types.ObjectId,
-        ref: 'Column', // Посилання на модель Column
+        ref: 'Column', // Посилання на модель Column, можливо ще треба додати схему тасок нижче
       },
     ],
   },
-  {
-    timestamps: true,
-  },
+  { timestamps: true, versionKey: false },
 );
 
 const Board = model('Board', boardSchema);
