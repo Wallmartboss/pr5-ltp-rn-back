@@ -33,7 +33,7 @@ paths:
   /users/current:
     get:
       $ref: ../swagger/paths/users/current.yaml
-  /users/{userId}:
+  /users/update:
     patch:
       $ref: ../swagger/paths/users/update.yaml
   /users/themes:

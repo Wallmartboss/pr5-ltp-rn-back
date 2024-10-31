@@ -24,6 +24,7 @@ properties:
   avatar:
     description: "User's avatar"
     type: string
+    format: binary
   createdAt:
     description: 'Date and time the contact was originally created'
     type: string
