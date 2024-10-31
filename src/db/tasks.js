@@ -1,30 +1,13 @@
-import { Schema, model } from 'mongoose';
+import mongoose from 'mongoose';
 
-const taskSchema = new Schema({
-  title: {
-    type: String,
-    required: true,
-  },
-  description: {
-    type: String,
-    required: true,
-  },
-  color: {
-    type: String,
-    enum: ['blue', 'pink', 'green', 'gray'],
-    required: true,
-  },
-  date: {
-    type: Date,
-    required: true,
-  },
-  boardId: {
-    type: Schema.Types.ObjectId,
-    ref: 'Board',
-    required: true,
-  },
-}, {
-  timestamps: true,
+const taskSchema = new mongoose.Schema({
+  title: { type: String, required: true },
+  description: { type: String, required: true },
+  color: { type: String, enum: ['blue', 'pink', 'green', 'gray'], required: true },
+  date: { type: Date, required: true },
+  boardId: { type: mongoose.Schema.Types.ObjectId, ref: 'Board', required: true },
+  createdAt: { type: Date, default: Date.now },
+  updatedAt: { type: Date, default: Date.now },
 });
 
-export const Task = model('Task', taskSchema);
+export const Task = mongoose.model('Task', taskSchema);

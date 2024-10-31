@@ -1,78 +1,68 @@
-import {
-    getAllTasks,
-    getTaskById,
-    createTask,
-    updateTask,
-    deleteTask,
-  } from '../services/tasks.js';
-  import createError from 'http-errors';
-  
-  export const getAllTasksController = async (req, res, next) => {
-    try {
-      const { boardId } = req.params;
-      const tasks = await getAllTasks(boardId);
-      res.json({
-        status: 200,
-        message: 'Successfully retrieved tasks',
-        data: tasks,
-      });
-    } catch (error) {
-      next(error);
+
+import createError from 'http-errors';
+import { Task } from '../db/tasks.js';
+
+export const getAllTasksController = async (req, res, next) => {
+  try {
+    const { boardId } = req.params;
+    const tasks = await Task.find({ boardId });
+    res.json({
+      status: 200,
+      message: 'Successfully found tasks!',
+      data: tasks,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+
+
+export const createTaskController = async (req, res, next) => {
+  try {
+    const { boardId } = req.params;
+    const taskData = { ...req.body, boardId };
+    const task = await Task.create(taskData);
+    res.status(201).json({
+      status: 201,
+      message: 'Successfully created a task!',
+      data: task,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const deleteTaskController = async (req, res, next) => {
+  try {
+    const { boardId, taskId } = req.params;
+    const task = await Task.findOneAndDelete({ _id: taskId, boardId });
+    if (!task) {
+      throw createError(404, 'Task not found');
     }
-  };
-  
-  export const getTaskByIdController = async (req, res, next) => {
-    try {
-      const { boardId, taskId } = req.params;
-      const task = await getTaskById(taskId, boardId);
-      if (!task) throw createError(404, 'Task not found');
-      res.json({
-        status: 200,
-        message: `Successfully retrieved task with id ${taskId}`,
-        data: task,
-      });
-    } catch (error) {
-      next(error);
+    res.status(204).send();
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const updateTaskController = async (req, res, next) => {
+  try {
+    const { boardId, taskId } = req.params;
+    const updatedTask = await Task.findOneAndUpdate(
+      { _id: taskId, boardId },
+      req.body,
+      { new: true }
+    );
+    if (!updatedTask) {
+      throw createError(404, 'Task not found');
     }
-  };
-  
-  export const createTaskController = async (req, res, next) => {
-    try {
-      const { boardId } = req.params;
-      const task = await createTask({ ...req.body, boardId });
-      res.status(201).json({
-        status: 201,
-        message: 'Successfully created task',
-        data: task,
-      });
-    } catch (error) {
-      next(error);
-    }
-  };
-  
-  export const updateTaskController = async (req, res, next) => {
-    try {
-      const { boardId, taskId } = req.params;
-      const task = await updateTask(taskId, boardId, req.body);
-      if (!task) throw createError(404, 'Task not found');
-      res.json({
-        status: 200,
-        message: `Successfully updated task with id ${taskId}`,
-        data: task,
-      });
-    } catch (error) {
-      next(error);
-    }
-  };
-  
-  export const deleteTaskController = async (req, res, next) => {
-    try {
-      const { boardId, taskId } = req.params;
-      const task = await deleteTask(taskId, boardId);
-      if (!task) throw createError(404, 'Task not found');
-      res.status(204).send();
-    } catch (error) {
-      next(error);
-    }
-  };
-  
+    res.json({
+      status: 200,
+      message: `Successfully updated task with id ${taskId}!`,
+      data: updatedTask,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
