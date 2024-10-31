@@ -14,11 +14,11 @@ router.get(
     ctrlWrapper(getCurrentUserController)
 );
 
-router.patch('/theme',
+router.patch('/themes',
     authenticate,
     ctrlWrapper(updateThemeController));
 
-router.patch('/info',
+router.patch('/update',
     authenticate,
     upload.single('avatar'),
     validateBody(updateUserSchema),
