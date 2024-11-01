@@ -3,8 +3,8 @@ import boardsRouter from './board.js';
 import usersRouter from './users.js';
 import authRouter from './auth.js';
 import columnsRouter from './column.js';
-import tasksRouter from './tasks.js'
-import { authenticate } from '../middlewares/authenticate.js'; 
+import tasksRouter from './tasks.js';
+import { authenticate } from '../middlewares/authenticate.js';
 
 const router = Router();
 

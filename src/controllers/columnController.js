@@ -1,47 +1,68 @@
 import { Column } from '../db/columnSchema.js';
+import { getAllColumns, createColumn } from '../services/column.js';
 
-import createError from 'http-errors';
+// import createError from 'http-errors';
 
-export const postColumn = async (req, res) => {
-  const { boardId } = req.params;
-
+export const getAllColumnsController = async (req, res) => {
   try {
-    const newColumn = await Column.create({ ...req.body, owner: boardId });
-    res.status(201).json(newColumn);
+    const { boardId } = req.params;
+    const Columns = await getAllColumns(boardId);
+    res.json(Columns);
   } catch (error) {
-    throw createError(404, 'Failed to create a column');
+    console.error('Error in getAllColumnsController:', error);
+    res.status(500).json({ message: 'Internal Server Error' });
   }
 };
-
+export const postColumn = async (req, res) => {
+  try {
+    const { title } = req.body; // Отримуємо дані з тіла запиту
+    const { boardId } = req.params;
+    const newColumn = await createColumn({
+      title,
+      boardId,
+    });
+    res.status(201).json(newColumn);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
 export const updateById = async (req, res) => {
   try {
     const { columnId } = req.params;
+    const { title } = req.body;
 
-    const result = await Column.findByIdAndUpdate(columnId, req.body, {
-      new: true,
-    });
-    if (!result) {
-      return res.status(404).json({ error: 'Column not found' });
+    const column = await Column.findOneAndUpdate(
+      { _id: columnId },
+      { title },
+      { new: true },
+    );
+
+    if (!column) {
+      return res
+        .status(404)
+        .json({ error: 'Column not found or not linked to this board' });
     }
-    res.json(result);
+
+    res.json(column);
   } catch (error) {
-    const status = error.status || 500;
-    const message = error.message || 'Failed to update column';
-    res.status(status).json({ error: message });
+    console.error('Error in updateById:', error);
+    res.status(500).json({ message: 'Failed to update column' });
   }
 };
 
 export const deleteById = async (req, res) => {
   try {
     const { columnId } = req.params;
-    const result = await Column.findByIdAndRemove(columnId);
-    if (!result) {
-      return res.status(404).json({ error: 'Column not found' });
+
+    const column = await Column.findOneAndDelete({ _id: columnId });
+    if (!column) {
+      return res
+        .status(404)
+        .json({ error: 'Column not found or not linked to this board' });
     }
-    res.json({ message: 'Column deleted successfully', deletedColumn: result });
+    res.json({ message: 'Column deleted successfully', deletedColumn: column });
   } catch (error) {
-    const status = error.status || 500;
-    const message = error.message || 'Failed to remove column';
-    res.status(status).json({ error: message });
+    console.error('Error in deleteById:', error);
+    res.status(500).json({ message: 'Failed to delete column' });
   }
 };
