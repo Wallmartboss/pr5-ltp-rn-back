@@ -15,7 +15,7 @@ const router = Router({ mergeParams: true });
 
 router.get('/', getAllTasksController);
 router.post('/', validateBody(taskSchema), createTaskController);
-router.put('/:taskId', isValidId, validateBody(taskSchema), updateTaskController);
+router.patch('/:taskId', isValidId, validateBody(taskSchema), updateTaskController);
 router.delete('/:taskId', isValidId, deleteTaskController);
 
 export default router;
