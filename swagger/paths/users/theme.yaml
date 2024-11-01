@@ -1,5 +1,5 @@
 tags:
-  - User
+  - Users
 summary: Update theme
 operationId: uodateTheme
 description: 'Update the selected theme in the user profile'

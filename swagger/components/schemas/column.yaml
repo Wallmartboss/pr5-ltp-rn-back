@@ -1,0 +1,48 @@
+type: object
+required:
+  - title
+  - owner
+properties:
+  _id:
+    description: 'Unique identifier for the column'
+    type: string
+    example: '635f3c37e3187a9b6d56d1a1'
+  title:
+    description: 'Title of the column'
+    type: string
+    example: 'In Progress'
+  tasks:
+    description: 'List of tasks associated with this column'
+    type: array
+    items:
+      $ref: '../../components/schemas/task.yaml'
+  owner:
+    description: 'Board ID for column'
+    type: string
+    example: '66f6c3f8313287b622b71110'
+  actions:
+    type: object
+    description: 'Functional buttons represented as icons to perform actions on the column'
+    properties:
+      editButton:
+        description: 'Clickable button with an icon for editing the column details'
+        type: string
+        example: 'pencil-01'
+      deleteButton:
+        description: 'Clickable button with an icon for deleting the column'
+        type: string
+        example: 'trash-04'
+  createdAt:
+    description: 'Timestamp of when the column was created'
+    type: string
+    format: date-time
+    example: '2024-10-06T12:45:15.699Z'
+  updatedAt:
+    description: 'Timestamp of the last update to the column'
+    type: string
+    format: date-time
+    example: '2024-10-07T12:45:15.699Z'
+  versionKey:
+    description: 'Indicates whether the document version key is included. Set to false to exclude the version key (__v) in the response.'
+    type: boolean
+    example: false
