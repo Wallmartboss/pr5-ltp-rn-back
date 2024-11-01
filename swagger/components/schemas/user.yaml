@@ -26,12 +26,12 @@ properties:
     type: string
     format: binary
   createdAt:
-    description: 'Date and time the contact was originally created'
+    description: 'Date and time the user was originally created'
     type: string
     format: date-time
     example: '2024-10-06T12:45:15.699Z'
   updatedAt:
-    description: 'Date and time the contact was last modified'
+    description: 'Date and time the user was last modified'
     type: string
     format: date-time
     example: '2024-10-06T12:45:15.699Z'

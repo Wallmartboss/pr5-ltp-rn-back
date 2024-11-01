@@ -9,7 +9,7 @@ info:
 tags:
   - name: Auth
     description: Auth operations.
-  - name: User
+  - name: Users
     description: User profile and settings operations.
   - name: Boards
     description: Operations for managing boards.
@@ -17,6 +17,8 @@ tags:
     description: Operations for managing columns.
   - name: Tasks
     description: Operations for managing tasks.
+  - name: Need Help
+    description: Possibility of sending a letter with a comment about help to the address - taskpro.project@gmail.com
 servers:
   - url: http://127.0.0.1:3000
   - url: https://pr5-ltp-rn-back.onrender.com
@@ -33,12 +35,24 @@ paths:
   /users/current:
     get:
       $ref: ../swagger/paths/users/current.yaml
-  /users/update:
+  /users/info:
     patch:
-      $ref: ../swagger/paths/users/update.yaml
-  /users/themes:
+      $ref: ../swagger/paths/users/info.yaml
+  /users/theme:
     patch:
-      $ref: ../swagger/paths/users/themes.yaml
+      $ref: ../swagger/paths/users/theme.yaml
+  /boards:
+    post:
+      $ref: ../swagger/paths/boards/post.yaml
+    get:
+      $ref: ../swagger/paths/boards/get.yaml
+  /boards/{id}:
+    get:
+      $ref: ../swagger/paths/boards/{id}/get.yaml
+    patch:
+      $ref: ../swagger/paths/boards/patch.yaml
+    delete:
+      $ref: ../swagger/paths/boards/delete.yaml
 components:
   securitySchemes:
     bearerAuth:
