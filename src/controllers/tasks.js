@@ -1,4 +1,3 @@
-
 import createError from 'http-errors';
 import { Task } from '../db/tasks.js';
 
@@ -16,12 +15,17 @@ export const getAllTasksController = async (req, res, next) => {
   }
 };
 
-
-
 export const createTaskController = async (req, res, next) => {
   try {
-    const { boardId } = req.params;
-    const taskData = { ...req.body, boardId };
+    const { boardId } = req.params; 
+    const { title, description, color, columnId } = req.body;
+
+  
+    if (!title || !description || !color || !columnId) {
+      throw createError(400, 'All fields (title, description, color, columnId) are required.');
+    }
+
+    const taskData = { title, description, color, columnId, boardId }; // Додаємо boardId
     const task = await Task.create(taskData);
     res.status(201).json({
       status: 201,
@@ -32,6 +36,7 @@ export const createTaskController = async (req, res, next) => {
     next(error);
   }
 };
+
 
 export const deleteTaskController = async (req, res, next) => {
   try {

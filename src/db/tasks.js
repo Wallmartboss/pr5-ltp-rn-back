@@ -18,8 +18,14 @@ const taskSchema = new mongoose.Schema({
   },
   boardId: { 
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'Board', required: true 
+    ref: 'boards',
+    required: true 
   },
+  columnId: { 
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'columns', 
+    required: true 
+  }
 },
 {
   timestamps: true,
