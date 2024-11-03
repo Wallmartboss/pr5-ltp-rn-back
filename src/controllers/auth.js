@@ -23,6 +23,11 @@ export const loginUserController = async (req, res) => {
         message: 'Successfully logged in an user!',
         data: {
             accessToken: session.accessToken,
+            userId: session.userId,
+            name: session.name,
+            email: session.email,
+            avatar: session.avatar,
+            theme: session.theme,
         },
     });
 };
