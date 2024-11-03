@@ -23,16 +23,24 @@
       "description": "Auth operations."
     },
     {
-      "name": "User",
+      "name": "Users",
       "description": "User profile and settings operations."
     },
     {
       "name": "Boards",
-      "description": "Operations for managing boards, columns, and cards."
+      "description": "Operations for managing boards."
     },
     {
-      "name": "Theme",
-      "description": "Operations for changing and saving user theme settings."
+      "name": "Columns",
+      "description": "Operations for managing columns."
+    },
+    {
+      "name": "Tasks",
+      "description": "Operations for managing tasks."
+    },
+    {
+      "name": "Need Help",
+      "description": "Possibility of sending a letter with a comment about help to the address - taskpro.project@gmail.com"
     }
   ],
   "paths": {
@@ -200,6 +208,952 @@
           }
         }
       }
+    },
+    "/auth/logout": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "User logout",
+        "operationId": "userLogout",
+        "description": "Log out the user, invalidating the authentication token.",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "User successfully logged out."
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        }
+      }
+    },
+    "/users/current": {
+      "get": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Retrieve current user profile",
+        "operationId": "getCurrentUser",
+        "description": "Fetch the profile details of the currently authenticated user.",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully retrieved the user profile.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "status",
+                    "message",
+                    "data"
+                  ],
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Successfully retrieved user profile."
+                    },
+                    "data": {
+                      "type": "object",
+                      "$ref": "#/components/schemas/user"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        }
+      }
+    },
+    "/users/info": {
+      "patch": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Update user",
+        "operationId": "updateUser",
+        "description": "Update user. To update, you must specify at least one field.",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "description": "User's name",
+                    "example": "John Doe"
+                  },
+                  "email": {
+                    "description": "User's email",
+                    "type": "string",
+                    "example": "user@example.com"
+                  },
+                  "avatar": {
+                    "description": "User's avatar",
+                    "type": "string"
+                  }
+                },
+                "description": "Update at least one of the fields"
+              }
+            }
+          },
+          "required": false
+        },
+        "responses": {
+          "200": {
+            "description": "Update user",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "status",
+                    "message",
+                    "data"
+                  ],
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "User updated successfully!"
+                    },
+                    "data": {
+                      "type": "object",
+                      "$ref": "#/components/schemas/user"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        }
+      }
+    },
+    "/users/theme": {
+      "patch": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Update theme",
+        "operationId": "uodateTheme",
+        "description": "Update the selected theme in the user profile",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "theme"
+                ],
+                "properties": {
+                  "theme": {
+                    "description": "User's theme",
+                    "type": "string",
+                    "enum": [
+                      "light",
+                      "dark",
+                      "violet"
+                    ],
+                    "example": "dark",
+                    "default": "dark"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successfully updated theme settings.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "status",
+                    "message",
+                    "data"
+                  ],
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Theme updated successfully!"
+                    },
+                    "data": {
+                      "type": "object",
+                      "example": "dark"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        }
+      }
+    },
+    "/boards": {
+      "post": {
+        "tags": [
+          "Boards"
+        ],
+        "summary": "Create a new board",
+        "operationId": "createBoard",
+        "description": "Creates a new board with the specified title, background, icon, and owner.",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "title"
+                ],
+                "properties": {
+                  "title": {
+                    "description": "Title of the board",
+                    "type": "string",
+                    "example": "Project office"
+                  },
+                  "icon": {
+                    "description": "Icon for the board",
+                    "type": "string",
+                    "enum": [
+                      "4dot",
+                      "star",
+                      "circle",
+                      "puzzle",
+                      "cube",
+                      "lighting",
+                      "3-circle",
+                      "octagon"
+                    ],
+                    "example": "4dot",
+                    "default": "4dot"
+                  },
+                  "background": {
+                    "description": "Background image for blackboard",
+                    "type": "string",
+                    "enum": [
+                      "default-bg-mob",
+                      "bg1-2x-mob.jpg",
+                      "bg2-2x-mob.jpg",
+                      "bg3-2x-mob.jpg",
+                      "bg4-2x-mob.jpg",
+                      "bg5-2x-mob.jpg",
+                      "bg6-2x-mob.jpg",
+                      "bg7-2x-mob.jpg",
+                      "bg8-2x-mob.jpg",
+                      "bg9-2x-mob.jpg",
+                      "bg10-2x-mob.jpg",
+                      "bg11-2x-mob.jpg",
+                      "bg12-2x-mob.jpg",
+                      "bg13-2x-mob.jpg",
+                      "bg14-2x-mob.jpg",
+                      "bg15-2x-mob.jpg",
+                      "default-bg-tab",
+                      "bg1-2x-tab.jpg",
+                      "bg2-2x-tab.jpg",
+                      "bg3-2x-tab.jpg",
+                      "bg4-2x-tab.jpg",
+                      "bg5-2x-tab.jpg",
+                      "bg6-2x-tab.jpg",
+                      "bg7-2x-tab.jpg",
+                      "bg8-2x-tab.jpg",
+                      "bg9-2x-tab.jpg",
+                      "bg10-2x-tab.jpg",
+                      "bg11-2x-tab.jpg",
+                      "bg12-2x-tab.jpg",
+                      "bg13-2x-tab.jpg",
+                      "bg14-2x-tab.jpg",
+                      "bg15-2x-tab.jpg",
+                      "default-bg-desk",
+                      "bg1-2x-desk.jpg",
+                      "bg2-2x-desk.jpg",
+                      "bg3-2x-desk.jpg",
+                      "bg4-2x-desk.jpg",
+                      "bg5-2x-desk.jpg",
+                      "bg6-2x-desk.jpg",
+                      "bg7-2x-desk.jpg",
+                      "bg8-2x-desk.jpg",
+                      "bg9-2x-desk.jpg",
+                      "bg10-2x-desk.jpg",
+                      "bg11-2x-desk.jpg",
+                      "bg12-2x-desk.jpg",
+                      "bg13-2x-desk.jpg",
+                      "bg14-2x-desk.jpg",
+                      "bg15-2x-desk.jpg"
+                    ],
+                    "example": "default-bg-desk",
+                    "default": "default-bg-desk"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Board successfully created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "status",
+                    "message",
+                    "data"
+                  ],
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 201
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Board created successfully"
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/board"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Boards"
+        ],
+        "summary": "Get boards list",
+        "operationId": "getBoards",
+        "description": "Get a list of all boards.",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Successfully found boards!",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "status",
+                    "message",
+                    "data"
+                  ],
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Successfully found boards!"
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/board"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        }
+      }
+    },
+    "/boards/{id}": {
+      "get": {
+        "tags": [
+          "Boards"
+        ],
+        "summary": "Get board by id",
+        "operationId": "getBoard",
+        "description": "Get board by id",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "65ca67e7ae7f10c88b598384"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Get board by id",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "status",
+                    "message",
+                    "data"
+                  ],
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Successfully found board with id 65ca67e7ae7f10c88b598384!"
+                    },
+                    "data": {
+                      "type": "object",
+                      "$ref": "#/components/schemas/board"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "Boards"
+        ],
+        "summary": "Update board by id",
+        "operationId": "updateBoard",
+        "description": "Update board by ID. To update, you must specify at least one field.",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Unique identifier for the board",
+            "example": "645f7a1e3a1e8c2a5d8e1b0c"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "title"
+                ],
+                "properties": {
+                  "title": {
+                    "description": "Title of the board",
+                    "type": "string",
+                    "example": "Project office"
+                  },
+                  "icon": {
+                    "description": "Icon for the board",
+                    "type": "string",
+                    "enum": [
+                      "4dot",
+                      "star",
+                      "circle",
+                      "puzzle",
+                      "cube",
+                      "lighting",
+                      "3-circle",
+                      "octagon"
+                    ],
+                    "example": "4dot",
+                    "default": "4dot"
+                  },
+                  "background": {
+                    "description": "Background image for blackboard",
+                    "type": "string",
+                    "enum": [
+                      "default-bg-mob",
+                      "bg1-2x-mob.jpg",
+                      "bg2-2x-mob.jpg",
+                      "bg3-2x-mob.jpg",
+                      "bg4-2x-mob.jpg",
+                      "bg5-2x-mob.jpg",
+                      "bg6-2x-mob.jpg",
+                      "bg7-2x-mob.jpg",
+                      "bg8-2x-mob.jpg",
+                      "bg9-2x-mob.jpg",
+                      "bg10-2x-mob.jpg",
+                      "bg11-2x-mob.jpg",
+                      "bg12-2x-mob.jpg",
+                      "bg13-2x-mob.jpg",
+                      "bg14-2x-mob.jpg",
+                      "bg15-2x-mob.jpg",
+                      "default-bg-tab",
+                      "bg1-2x-tab.jpg",
+                      "bg2-2x-tab.jpg",
+                      "bg3-2x-tab.jpg",
+                      "bg4-2x-tab.jpg",
+                      "bg5-2x-tab.jpg",
+                      "bg6-2x-tab.jpg",
+                      "bg7-2x-tab.jpg",
+                      "bg8-2x-tab.jpg",
+                      "bg9-2x-tab.jpg",
+                      "bg10-2x-tab.jpg",
+                      "bg11-2x-tab.jpg",
+                      "bg12-2x-tab.jpg",
+                      "bg13-2x-tab.jpg",
+                      "bg14-2x-tab.jpg",
+                      "bg15-2x-tab.jpg",
+                      "default-bg-desk",
+                      "bg1-2x-desk.jpg",
+                      "bg2-2x-desk.jpg",
+                      "bg3-2x-desk.jpg",
+                      "bg4-2x-desk.jpg",
+                      "bg5-2x-desk.jpg",
+                      "bg6-2x-desk.jpg",
+                      "bg7-2x-desk.jpg",
+                      "bg8-2x-desk.jpg",
+                      "bg9-2x-desk.jpg",
+                      "bg10-2x-desk.jpg",
+                      "bg11-2x-desk.jpg",
+                      "bg12-2x-desk.jpg",
+                      "bg13-2x-desk.jpg",
+                      "bg14-2x-desk.jpg",
+                      "bg15-2x-desk.jpg"
+                    ],
+                    "example": "default-bg-desk",
+                    "default": "default-bg-desk"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Board successfully updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "status",
+                    "message",
+                    "data"
+                  ],
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Successfully patched a board!"
+                    },
+                    "data": {
+                      "type": "object",
+                      "$ref": "#/components/schemas/board"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Boards"
+        ],
+        "summary": "Delete board by id",
+        "operationId": "deleteBoard",
+        "description": "Delete board by id",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "65ca67e7ae7f10c88b598384"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successfully deleted board"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        }
+      }
+    },
+    "/columns": {
+      "post": {
+        "tags": [
+          "Columns"
+        ],
+        "summary": "Create a new column",
+        "operationId": "createColumn",
+        "description": "Creates a new column with the specified title.",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "title"
+                ],
+                "properties": {
+                  "title": {
+                    "description": "Title of the column",
+                    "type": "string",
+                    "example": "New Column"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Column successfully created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "status",
+                    "message",
+                    "data"
+                  ],
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 201
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Column created successfully"
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/column"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Columns"
+        ],
+        "summary": "Get columns list",
+        "operationId": "getColumns",
+        "description": "Get a list of all columns.",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Successfully found columns!",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "status",
+                    "message",
+                    "data"
+                  ],
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Successfully found columns!"
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/column"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        }
+      }
+    },
+    "/columns/{id}": {
+      "patch": {
+        "tags": [
+          "Columns"
+        ],
+        "summary": "Update column by id",
+        "operationId": "updateColumn",
+        "description": "Update column by ID. To update, you must specify at least one field.",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Unique identifier for the column",
+            "example": "645f7a1e3a1e8c2a5d8e1b0c"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "title"
+                ],
+                "properties": {
+                  "title": {
+                    "description": "Title of the column",
+                    "type": "string",
+                    "example": "Done"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Column successfully updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "status",
+                    "message",
+                    "data"
+                  ],
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Successfully patched a column!"
+                    },
+                    "data": {
+                      "type": "object",
+                      "$ref": "#/components/schemas/column"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Columns"
+        ],
+        "summary": "Delete column by id",
+        "operationId": "deleteColumn",
+        "description": "Delete column by id",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "65ca67e7ae7f10c88b598384"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successfully deleted column"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        }
+      }
     }
   },
   "components": {
@@ -232,6 +1186,345 @@
             "description": "User's email",
             "type": "string",
             "example": "user@example.com"
+          },
+          "theme": {
+            "description": "User's theme",
+            "enum": [
+              "light",
+              "dark",
+              "violet"
+            ],
+            "example": "dark",
+            "default": "dark"
+          },
+          "avatar": {
+            "description": "User's avatar",
+            "type": "string",
+            "format": "binary"
+          },
+          "createdAt": {
+            "description": "Date and time the user was originally created",
+            "type": "string",
+            "format": "date-time",
+            "example": "2024-10-06T12:45:15.699Z"
+          },
+          "updatedAt": {
+            "description": "Date and time the user was last modified",
+            "type": "string",
+            "format": "date-time",
+            "example": "2024-10-06T12:45:15.699Z"
+          },
+          "versionKey": {
+            "description": "Indicates whether the document version key is included. Set to false to exclude the version key (__v) in the response.",
+            "type": "boolean",
+            "example": false
+          }
+        }
+      },
+      "task": {
+        "type": "object",
+        "required": [
+          "title",
+          "description",
+          "priority",
+          "deadline"
+        ],
+        "properties": {
+          "_id": {
+            "description": "Task's unique identifier",
+            "type": "string",
+            "example": "6702865b0b15384575dc30fa"
+          },
+          "title": {
+            "description": "Title of the card",
+            "type": "string",
+            "example": "The Watch Sport Design"
+          },
+          "description": {
+            "description": "Detailed description of the task",
+            "type": "string",
+            "example": "Create a visually stunning and eye-catching watch dial desing..."
+          },
+          "priority": {
+            "description": "Priority level of the task",
+            "type": "string",
+            "enum": [
+              "low",
+              "medium",
+              "high",
+              "without"
+            ],
+            "example": "without",
+            "default": "without"
+          },
+          "label color": {
+            "description": "Color associated with the priority level",
+            "type": "string",
+            "enum": [
+              "#8FA1D0",
+              "#E09CB5",
+              "#BEDBB0",
+              "#161616"
+            ],
+            "example": "#161616",
+            "default": "#161616"
+          },
+          "deadline": {
+            "description": "Deadline for completing task",
+            "type": "string",
+            "format": "date",
+            "example": "12/11/2024"
+          },
+          "column": {
+            "description": "Column the task belongs to",
+            "type": "string",
+            "example": "In Progress"
+          },
+          "owner": {
+            "description": "ID of the user who owns the board",
+            "type": "string",
+            "example": "66f6c3f8313287b622b71110"
+          },
+          "actions": {
+            "type": "object",
+            "description": "Clickable buttons and icon associated with the task",
+            "properties": {
+              "deadlineIcon": {
+                "description": "Icon that appears when the current date matches the deadline",
+                "type": "boolean",
+                "example": true
+              },
+              "moveButton": {
+                "description": "Clickable button to move the task to another column",
+                "type": "string",
+                "example": "arrow-circle-broken-right"
+              },
+              "editButton": {
+                "description": "Clickable button with an icon for editing the task details",
+                "type": "string",
+                "example": "pencil-01"
+              },
+              "deleteButton": {
+                "description": "Clickable button with an icon for deleting the task",
+                "type": "string",
+                "example": "trash-04"
+              }
+            }
+          },
+          "createdAt": {
+            "description": "Date and time the task was originally created",
+            "type": "string",
+            "format": "date-time",
+            "example": "2024-10-06T12:45:15.699Z"
+          },
+          "updatedAt": {
+            "description": "Date and time the task was last modified",
+            "type": "string",
+            "format": "date-time",
+            "example": "2024-10-06T12:45:15.699Z"
+          },
+          "versionKey": {
+            "description": "Indicates whether the document version key is included",
+            "type": "boolean",
+            "example": false
+          }
+        }
+      },
+      "column": {
+        "type": "object",
+        "required": [
+          "title"
+        ],
+        "properties": {
+          "_id": {
+            "description": "Unique identifier for the column",
+            "type": "string",
+            "example": "635f3c37e3187a9b6d56d1a1"
+          },
+          "title": {
+            "description": "Title of the column",
+            "type": "string",
+            "example": "In Progress"
+          },
+          "tasks": {
+            "description": "List of tasks associated with this column",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/task"
+            }
+          },
+          "owner": {
+            "description": "ID of the user who owns the board",
+            "type": "string",
+            "example": "66f6c3f8313287b622b71110"
+          },
+          "actions": {
+            "type": "object",
+            "description": "Functional buttons represented as icons to perform actions on the column",
+            "properties": {
+              "editButton": {
+                "description": "Clickable button with an icon for editing the column details",
+                "type": "string",
+                "example": "pencil-01"
+              },
+              "deleteButton": {
+                "description": "Clickable button with an icon for deleting the column",
+                "type": "string",
+                "example": "trash-04"
+              }
+            }
+          },
+          "createdAt": {
+            "description": "Timestamp of when the column was created",
+            "type": "string",
+            "format": "date-time",
+            "example": "2024-10-06T12:45:15.699Z"
+          },
+          "updatedAt": {
+            "description": "Timestamp of the last update to the column",
+            "type": "string",
+            "format": "date-time",
+            "example": "2024-10-07T12:45:15.699Z"
+          },
+          "versionKey": {
+            "description": "Indicates whether the document version key is included. Set to false to exclude the version key (__v) in the response.",
+            "type": "boolean",
+            "example": false
+          }
+        }
+      },
+      "board": {
+        "type": "object",
+        "required": [
+          "title"
+        ],
+        "properties": {
+          "_id": {
+            "description": "Unique identifier for the board",
+            "type": "string",
+            "example": "645f7a1e3a1e8c2a5d8e1b0c"
+          },
+          "title": {
+            "description": "Title of the board",
+            "type": "string",
+            "example": "Project office"
+          },
+          "icon": {
+            "description": "Icon for the board",
+            "type": "string",
+            "enum": [
+              "4dot",
+              "star",
+              "circle",
+              "puzzle",
+              "cube",
+              "lighting",
+              "3-circle",
+              "octagon"
+            ],
+            "example": "4dot",
+            "default": "4dot"
+          },
+          "background": {
+            "description": "Background image for blackboard",
+            "type": "string",
+            "enum": [
+              "default-bg-mob",
+              "bg1-2x-mob.jpg",
+              "bg2-2x-mob.jpg",
+              "bg3-2x-mob.jpg",
+              "bg4-2x-mob.jpg",
+              "bg5-2x-mob.jpg",
+              "bg6-2x-mob.jpg",
+              "bg7-2x-mob.jpg",
+              "bg8-2x-mob.jpg",
+              "bg9-2x-mob.jpg",
+              "bg10-2x-mob.jpg",
+              "bg11-2x-mob.jpg",
+              "bg12-2x-mob.jpg",
+              "bg13-2x-mob.jpg",
+              "bg14-2x-mob.jpg",
+              "bg15-2x-mob.jpg",
+              "default-bg-tab",
+              "bg1-2x-tab.jpg",
+              "bg2-2x-tab.jpg",
+              "bg3-2x-tab.jpg",
+              "bg4-2x-tab.jpg",
+              "bg5-2x-tab.jpg",
+              "bg6-2x-tab.jpg",
+              "bg7-2x-tab.jpg",
+              "bg8-2x-tab.jpg",
+              "bg9-2x-tab.jpg",
+              "bg10-2x-tab.jpg",
+              "bg11-2x-tab.jpg",
+              "bg12-2x-tab.jpg",
+              "bg13-2x-tab.jpg",
+              "bg14-2x-tab.jpg",
+              "bg15-2x-tab.jpg",
+              "default-bg-desk",
+              "bg1-2x-desk.jpg",
+              "bg2-2x-desk.jpg",
+              "bg3-2x-desk.jpg",
+              "bg4-2x-desk.jpg",
+              "bg5-2x-desk.jpg",
+              "bg6-2x-desk.jpg",
+              "bg7-2x-desk.jpg",
+              "bg8-2x-desk.jpg",
+              "bg9-2x-desk.jpg",
+              "bg10-2x-desk.jpg",
+              "bg11-2x-desk.jpg",
+              "bg12-2x-desk.jpg",
+              "bg13-2x-desk.jpg",
+              "bg14-2x-desk.jpg",
+              "bg15-2x-desk.jpg"
+            ],
+            "example": "default-bg-desk",
+            "default": "default-bg-desk"
+          },
+          "columns": {
+            "description": "List of columns and tasks associated with the board",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/column"
+            }
+          },
+          "owner": {
+            "description": "ID of the user who owns the board",
+            "type": "string",
+            "example": "66f6c3f8313287b622b71110"
+          },
+          "actions": {
+            "type": "object",
+            "description": "Functional buttons represented as icons to perform actions on the board",
+            "properties": {
+              "editButton": {
+                "description": "Clickable button with an icon for deleting the board",
+                "type": "string",
+                "example": "pencil-01"
+              },
+              "deleteButton": {
+                "description": "Button to delete the board",
+                "type": "string",
+                "example": "trash-04"
+              }
+            }
+          },
+          "createdAt": {
+            "description": "Date and time the board was originally created",
+            "type": "string",
+            "format": "date-time",
+            "example": "2024-10-06T12:45:15.699Z"
+          },
+          "updatedAt": {
+            "description": "Date and time the board was last modified",
+            "type": "string",
+            "format": "date-time",
+            "example": "2024-10-07T12:45:15.699Z"
+          },
+          "versionKey": {
+            "description": "Indicates whether the document version key is included. Set to false to exclude the version key (__v) in the response.",
+            "type": "boolean",
+            "example": false
           }
         }
       }
@@ -305,6 +1598,26 @@
                       "example": "Access token expired"
                     }
                   }
+                }
+              }
+            }
+          }
+        }
+      },
+      "404": {
+        "description": "Not found.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "integer",
+                  "example": 404
+                },
+                "message": {
+                  "type": "string",
+                  "example": "Nothing was found for your request..."
                 }
               }
             }
