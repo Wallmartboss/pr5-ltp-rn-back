@@ -10,11 +10,11 @@ properties:
     description: 'Title of the column'
     type: string
     example: 'In Progress'
-  tasks:
-    description: 'List of tasks associated with this column'
+  cards:
+    description: 'List of cards associated with this column'
     type: array
     items:
-      $ref: '../../components/schemas/task.yaml'
+      $ref: '../../components/schemas/card.yaml'
   owner:
     description: 'ID of the user who owns the board'
     type: string

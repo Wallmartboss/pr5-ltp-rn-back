@@ -15,10 +15,10 @@ tags:
     description: Operations for managing boards.
   - name: Columns
     description: Operations for managing columns.
-  - name: Tasks
+  - name: Cards
     description: Operations for managing tasks.
-  - name: Need Help
-    description: Possibility of sending a letter with a comment about help to the address - taskpro.project@gmail.com
+  - name: Help
+    description: Possibility of sending a letter with a comment about help to the address - Taskpro.project@gmail.com
 servers:
   - url: http://127.0.0.1:3000
   - url: https://pr5-ltp-rn-back.onrender.com
@@ -63,6 +63,17 @@ paths:
       $ref: ../swagger/paths/columns/patch.yaml
     delete:
       $ref: ../swagger/paths/columns/delete.yaml
+  /cards:
+    post:
+      $ref: ../swagger/paths/cards/post.yaml
+  /cards/{id}:
+    patch:
+      $ref: ../swagger/paths/cards/patch.yaml
+    delete:
+      $ref: ../swagger/paths/cards/delete.yaml
+  /help:
+    post:
+      $ref: ../swagger/paths/help/post.yaml
 components:
   securitySchemes:
     bearerAuth:

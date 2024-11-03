@@ -1,0 +1,67 @@
+tags:
+  - Cards
+summary: Create a new card
+operationId: creatCard
+description: 'Creates a new card with the specified title.'
+security:
+  - bearerAuth: []
+requestBody:
+  required: true
+  content:
+    application/json:
+      schema:
+        type: object
+        required:
+          - title
+          - description
+          - deadline
+        properties:
+          title:
+            description: 'Title of the card'
+            type: string
+            example: 'New card'
+          description:
+            description: 'Detailed description of the card'
+            type: string
+            example: 'Create a visually stunning and eye-catching watch dial desing...'
+          priority:
+            description: 'Priority level of the card'
+            type: string
+            enum: ['low', 'medium', 'high', 'without']
+            example: 'without'
+            default: 'without'
+          label color:
+            description: 'Color associated with the priority level'
+            type: string
+            enum: ['#8FA1D0', '#E09CB5', '#BEDBB0', '#161616']
+            example: '#161616'
+            default: '#161616'
+          deadline:
+            description: 'Deadline for completing card'
+            type: string
+            format: date
+            example: '12/11/2024'
+responses:
+  '201':
+    description: 'Card successfully created'
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - status
+            - message
+            - data
+          properties:
+            status:
+              type: integer
+              example: 201
+            message:
+              type: string
+              example: 'Column created successfully'
+            data:
+              $ref: '../../components/schemas/card.yaml'
+  '401':
+    $ref: '../../components/responses/401.yaml'
+  '500':
+    $ref: '../../components/responses/500.yaml'

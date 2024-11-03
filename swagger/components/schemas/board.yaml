@@ -83,7 +83,7 @@ properties:
     example: 'default-bg-desk'
     default: 'default-bg-desk'
   columns:
-    description: 'List of columns and tasks associated with the board'
+    description: 'List of columns and cards associated with the board'
     type: array
     items:
       $ref: '../../components/schemas/column.yaml'
