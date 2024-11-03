@@ -1,7 +1,6 @@
 type: object
 required:
   - title
-  - owner
 properties:
   _id:
     description: 'Unique identifier for the board'
@@ -89,7 +88,7 @@ properties:
     items:
       $ref: '../../components/schemas/column.yaml'
   owner:
-    description: 'Reference to the user who owns the board'
+    description: 'ID of the user who owns the board'
     type: string
     example: '66f6c3f8313287b622b71110'
   actions:

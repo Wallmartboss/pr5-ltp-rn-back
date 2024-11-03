@@ -22,10 +22,6 @@ requestBody:
         required:
           - title
         properties:
-          _id:
-            description: 'Unique identifier for the board'
-            type: string
-            example: '645f7a1e3a1e8c2a5d8e1b0c'
           title:
             description: 'Title of the board'
             type: string

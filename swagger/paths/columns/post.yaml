@@ -1,0 +1,44 @@
+tags:
+  - Columns
+summary: Create a new column
+operationId: createColumn
+description: 'Creates a new column with the specified title.'
+security:
+  - bearerAuth: []
+requestBody:
+  required: true
+  content:
+    application/json:
+      schema:
+        type: object
+        required:
+          - title
+        properties:
+          title:
+            description: 'Title of the column'
+            type: string
+            example: 'New Column'
+responses:
+  '201':
+    description: 'Column successfully created'
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - status
+            - message
+            - data
+          properties:
+            status:
+              type: integer
+              example: 201
+            message:
+              type: string
+              example: 'Column created successfully'
+            data:
+              $ref: '../../components/schemas/column.yaml'
+  '401':
+    $ref: '../../components/responses/401.yaml'
+  '500':
+    $ref: '../../components/responses/500.yaml'

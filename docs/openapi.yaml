@@ -53,6 +53,16 @@ paths:
       $ref: ../swagger/paths/boards/patch.yaml
     delete:
       $ref: ../swagger/paths/boards/delete.yaml
+  /columns:
+    post:
+      $ref: ../swagger/paths/columns/post.yaml
+    get:
+      $ref: ../swagger/paths/columns/get.yaml
+  /columns/{id}:
+    patch:
+      $ref: ../swagger/paths/columns/patch.yaml
+    delete:
+      $ref: ../swagger/paths/columns/delete.yaml
 components:
   securitySchemes:
     bearerAuth:
