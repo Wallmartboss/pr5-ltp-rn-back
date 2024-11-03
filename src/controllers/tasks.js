@@ -15,6 +15,27 @@ export const getAllTasksController = async (req, res, next) => {
   }
 };
 
+
+export const getTaskByIdController = async (req, res, next) => { 
+  try {
+    const { boardId, taskId } = req.params;
+    const task = await Task.findOne({ _id: taskId, boardId });
+    
+    if (!task) {
+      throw createError(404, 'Task not found');
+    }
+
+    res.json({
+      status: 200,
+      message: 'Successfully found the task!',
+      data: task,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+
 export const createTaskController = async (req, res, next) => {
   try {
     const { boardId } = req.params; 
@@ -25,7 +46,7 @@ export const createTaskController = async (req, res, next) => {
       throw createError(400, 'All fields (title, description, color, columnId) are required.');
     }
 
-    const taskData = { title, description, color, columnId, boardId }; // Додаємо boardId
+    const taskData = { title, description, color, columnId, boardId }; 
     const task = await Task.create(taskData);
     res.status(201).json({
       status: 201,
