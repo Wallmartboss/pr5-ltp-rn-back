@@ -12,7 +12,7 @@
 // src/routes/index.js
 import { Router } from 'express';
 import authRouter from './auth.js';
-import tasksRouter from './tasks.js';
+import cardsRouter from "./cards.js";
 import { authenticate } from '../middlewares/authenticate.js'; 
 
 const router = Router();
@@ -20,7 +20,7 @@ const router = Router();
 
 router.use('/auth', authRouter);
 
-router.use('/tasks', authenticate, tasksRouter);
+router.use('/cards', authenticate, cardsRouter);
 
 export default router;
 
