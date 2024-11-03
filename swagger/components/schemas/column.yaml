@@ -1,7 +1,6 @@
 type: object
 required:
   - title
-  - owner
 properties:
   _id:
     description: 'Unique identifier for the column'
@@ -17,7 +16,7 @@ properties:
     items:
       $ref: '../../components/schemas/task.yaml'
   owner:
-    description: 'Board ID for column'
+    description: 'ID of the user who owns the board'
     type: string
     example: '66f6c3f8313287b622b71110'
   actions:

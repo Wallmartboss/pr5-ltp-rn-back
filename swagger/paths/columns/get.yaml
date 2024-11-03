@@ -1,14 +1,14 @@
 tags:
-  - Boards
-summary: Get boards list
-operationId: getBoards
-description: 'Get a list of all boards.'
+  - Columns
+summary: Get columns list
+operationId: getColumns
+description: 'Get a list of all columns.'
 security:
   - bearerAuth: []
 parameters: []
 responses:
   '200':
-    description: 'Successfully found boards!'
+    description: 'Successfully found columns!'
     content:
       application/json:
         schema:
@@ -23,11 +23,11 @@ responses:
               example: 200
             message:
               type: string
-              example: Successfully found boards!
+              example: Successfully found columns!
             data:
               type: array
               items:
-                $ref: '../../components/schemas/board.yaml'
+                $ref: '../../components/schemas/column.yaml'
   '401':
     $ref: '../../components/responses/401.yaml'
   '500':
