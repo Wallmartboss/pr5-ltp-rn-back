@@ -1,5 +1,6 @@
 import createError from 'http-errors';
 import { Card } from '../db/cards.js';
+import mongoose from 'mongoose';
 
 export const getAllCardsController = async (req, res, next) => {
   try {
@@ -38,25 +39,24 @@ export const getCardByIdController = async (req, res, next) => {
 
 export const createCardController = async (req, res, next) => {
   try {
-    const { boardId } = req.params; 
-    const { title, description, color, columnId } = req.body;
+    const { title, description, color, boardId, columnId } = req.body;
 
-  
-    if (!title || !description || !color || !columnId) {
-      throw createError(400, 'All fields (title, description, color, columnId) are required.');
+    if (!mongoose.Types.ObjectId.isValid(boardId) || !mongoose.Types.ObjectId.isValid(columnId)) {
+      return res.status(400).json({ message: 'Invalid boardId or columnId' });
     }
 
-    const cardData = { title, description, color, columnId, boardId }; 
+    const cardData = { title, description, color, boardId, columnId };
     const card = await Card.create(cardData);
     res.status(201).json({
       status: 201,
-      message: 'Successfully created a task!',
+      message: 'Successfully created a card!',
       data: card,
     });
   } catch (error) {
     next(error);
   }
 };
+
 
 
 export const deleteCardController = async (req, res, next) => {
@@ -81,11 +81,11 @@ export const updateCardController = async (req, res, next) => {
       { new: true }
     );
     if (!updatedTask) {
-      throw createError(404, 'Task not found');
+      throw createError(404, 'Card not found');
     }
     res.json({
       status: 200,
-      message: `Successfully updated task with id ${cardId}!`,
+      message: `Successfully updated Card with id ${cardId}!`,
       data: updatedTask,
     });
   } catch (error) {
