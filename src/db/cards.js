@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 
-const taskSchema = new mongoose.Schema({
+const cardSchema = new mongoose.Schema({
   title: { 
     type: String, required: true 
   },
@@ -32,4 +32,4 @@ const taskSchema = new mongoose.Schema({
   versionKey: false
 });
 
-export const Task = mongoose.model('Task', taskSchema);
+export const Card = mongoose.model('Card', cardSchema);  
