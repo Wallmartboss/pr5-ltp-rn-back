@@ -21,10 +21,6 @@ requestBody:
             type: string
             format: email
             example: 'user@example.com'
-          subject:
-            description: 'Subject of the help request'
-            type: string
-            example: 'Assistance with creating a new column'
           message:
             description: 'Detailed message with comments or questions'
             type: string
