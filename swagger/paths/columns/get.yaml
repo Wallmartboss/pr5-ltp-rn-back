@@ -1,0 +1,34 @@
+tags:
+  - Columns
+summary: Get columns list
+operationId: getColumns
+description: 'Get a list of all columns.'
+security:
+  - bearerAuth: []
+parameters: []
+responses:
+  '200':
+    description: 'Successfully found columns!'
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - status
+            - message
+            - data
+          properties:
+            status:
+              type: integer
+              example: 200
+            message:
+              type: string
+              example: Successfully found columns!
+            data:
+              type: array
+              items:
+                $ref: '../../components/schemas/column.yaml'
+  '401':
+    $ref: '../../components/responses/401.yaml'
+  '500':
+    $ref: '../../components/responses/500.yaml'
