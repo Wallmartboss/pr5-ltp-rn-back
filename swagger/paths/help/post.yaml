@@ -1,0 +1,52 @@
+tags:
+  - Help
+summary: Send help request email
+operationId: sendHelpRequest
+description: 'Allows users to send a help request email with comments or questions to Taskpro support.'
+security:
+  - bearerAuth: []
+requestBody:
+  required: true
+  content:
+    application/json:
+      schema:
+        type: object
+        required:
+          - email
+          - subject
+          - message
+        properties:
+          email:
+            description: 'User email address to receive a response'
+            type: string
+            format: email
+            example: 'user@example.com'
+          subject:
+            description: 'Subject of the help request'
+            type: string
+            example: 'Assistance with creating a new column'
+          message:
+            description: 'Detailed message with comments or questions'
+            type: string
+            example: 'I need help with creating a new column in my project.'
+responses:
+  '200':
+    description: 'Successfully send message about help'
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - status
+            - message
+          properties:
+            status:
+              type: integer
+              example: 200
+            message:
+              type: string
+              example: 'Help request sent successfully'
+  '400':
+    $ref: '../../components/responses/400.yaml'
+  '500':
+    $ref: '../../components/responses/500.yaml'

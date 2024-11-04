@@ -1,0 +1,74 @@
+tags:
+  - Cards
+summary: Update card by id
+operationId: updateCard
+description: 'Update card by ID. To update, you must specify at least one field.'
+security:
+  - bearerAuth: []
+parameters:
+  - in: path
+    name: id
+    required: true
+    schema:
+      type: string
+    description: 'Unique identifier for the card'
+    example: '645f7a1e3a1e8c2a5d8e1b0c'
+requestBody:
+  required: true
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          title:
+            description: 'Title of the card'
+            type: string
+            example: 'The Watch Sport Design'
+          description:
+            description: 'Detailed description of the card'
+            type: string
+            example: 'Create a visually stunning and eye-catching watch dial desing...'
+          priority:
+            description: 'Priority level of the card'
+            type: string
+            enum: ['low', 'medium', 'high', 'without']
+            example: 'without'
+            default: 'without'
+          label color:
+            description: 'Color associated with the priority level'
+            type: string
+            enum: ['#8FA1D0', '#E09CB5', '#BEDBB0', '#161616']
+            example: '#161616'
+            default: '#161616'
+          deadline:
+            description: 'Deadline for completing card'
+            type: string
+            format: date
+            example: '12/11/2024'
+responses:
+  '200':
+    description: 'Card successfully updated'
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - status
+            - message
+            - data
+          properties:
+            status:
+              type: integer
+              example: 200
+            message:
+              type: string
+              example: 'Successfully patched a card!'
+            data:
+              type: object
+              $ref: '../../components/schemas/card.yaml'
+  '401':
+    $ref: '../../components/responses/401.yaml'
+  '404':
+    $ref: '../../components/responses/404.yaml'
+  '500':
+    $ref: '../../components/responses/500.yaml'
