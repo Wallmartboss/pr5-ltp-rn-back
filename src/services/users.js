@@ -14,7 +14,10 @@ export const updateUser = async (userId, payload, options = {}) => {
   if (!rawResult) return null;
 
   return {
-    user: rawResult,
+    name: rawResult.name,
+    email: rawResult.email,
+    avatar: rawResult.avatar,
+    theme: rawResult.theme,
   };
 };
 

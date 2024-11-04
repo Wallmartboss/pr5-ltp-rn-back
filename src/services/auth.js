@@ -33,12 +33,21 @@ export const loginUser = async (payload) => {
 
     const accessToken = randomBytes(30).toString('base64');
 
-
-    return await SessionsCollection.create({
+    const session = await SessionsCollection.create({
         userId: user._id,
         accessToken,
         accessTokenValidUntil: new Date(Date.now() + TWO_HOURS),
     });
+
+
+    return {
+        accessToken: session.accessToken,
+        userId: user._id,
+        name: user.name,
+        email: user.email,
+        avatar: user.avatar,
+        theme: user.theme,
+    };
 };
 
 export const logoutUser = async (sessionId) => {
