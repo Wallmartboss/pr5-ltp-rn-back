@@ -12,10 +12,18 @@ import { swaggerDocs } from './middlewares/swaggerDocs.js';
 const PORT = Number(env('PORT', '3000'));
 
 export const setupServer = () => {
+  const express = require('express');
+  const cors = require('cors');
   const app = express();
 
   app.use(express.json());
-  app.use(cors());
+  app.use(
+    cors({
+      origin: '*',
+      methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
+      credentials: true,
+    }),
+  );
   app.use(cookieParser());
   // app.use('/uploads', express.static(UPLOAD_DIR));
   app.use('/api-docs', swaggerDocs());
