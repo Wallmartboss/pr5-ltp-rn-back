@@ -12,7 +12,6 @@ import { swaggerDocs } from './middlewares/swaggerDocs.js';
 const PORT = Number(env('PORT', '3000'));
 
 export const setupServer = () => {
-  const express = require('express');
   const cors = require('cors');
   const app = express();
 
