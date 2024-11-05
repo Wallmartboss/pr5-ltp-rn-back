@@ -1,5 +1,6 @@
 import { Column } from '../db/columnSchema.js';
 import { getAllColumns, createColumn } from '../services/column.js';
+import Board from '../db/board.js'; //Леся
 
 // import createError from 'http-errors';
 
@@ -19,8 +20,14 @@ export const postColumn = async (req, res) => {
     const { boardId } = req.params;
     const newColumn = await createColumn({
       title,
-      boardId,
+      boardId: boardId, //Леся
     });
+
+    // Додаємо колонку до дошки Леся
+    await Board.findByIdAndUpdate(boardId, {
+      $push: { columns: newColumn._id },
+    });
+
     res.status(201).json(newColumn);
   } catch (error) {
     res.status(500).json({ message: error.message });
