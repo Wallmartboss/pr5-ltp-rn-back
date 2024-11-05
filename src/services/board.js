@@ -11,7 +11,15 @@ export const getAllBoards = async (userId) => {
 // Отримуєм дошку за ID
 export const getBoardById = async (id) => {
   console.log(`Fetching board with ID: ${id}`);
-  const board = await Board.findById(id); /* .populate('columns') */ //закомент.якщо не потрібні дані колонок у відповіді
+  const board = await Board.findById(id)
+    .populate({
+      path: 'columns',
+      populate: { path: 'cards', model: 'Card' },
+    })
+    .lean(); //Леся
+  console.log('Fetched board with populated columns and cards:', board);
+
+  //закомент.якщо не потрібні дані колонок у відповіді
   if (!board) {
     throw createHttpError(404, 'Board not found');
   }

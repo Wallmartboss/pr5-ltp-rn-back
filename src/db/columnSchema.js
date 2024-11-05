@@ -10,7 +10,9 @@ const columnSchema = new Schema(
       ref: 'Board',
       required: true,
     },
+    cards: [{ type: Schema.Types.ObjectId, ref: 'Card' }],
   },
+
   { versionKey: false, timestamps: true },
 );
 
