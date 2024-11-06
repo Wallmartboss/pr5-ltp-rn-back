@@ -1,0 +1,78 @@
+type: object
+required:
+  - title
+  - description
+  - priority
+  - deadline
+properties:
+  _id:
+    description: "card's unique identifier"
+    type: string
+    example: '6702865b0b15384575dc30fa'
+  title:
+    description: 'Title of the card'
+    type: string
+    example: 'The Watch Sport Design'
+  description:
+    description: 'Detailed description of the card'
+    type: string
+    example: 'Create a visually stunning and eye-catching watch dial desing...'
+  priority:
+    description: 'Priority level of the card'
+    type: string
+    enum: ['low', 'medium', 'high', 'without']
+    example: 'without'
+    default: 'without'
+  label color:
+    description: 'Color associated with the priority level'
+    type: string
+    enum: ['#8FA1D0', '#E09CB5', '#BEDBB0', '#161616']
+    example: '#161616'
+    default: '#161616'
+  deadline:
+    description: 'Deadline for completing card'
+    type: string
+    format: date
+    example: '12/11/2024'
+  column:
+    description: 'Column the card belongs to'
+    type: string
+    example: 'In Progress'
+  owner:
+    description: 'ID of the user who owns the board'
+    type: string
+    example: '66f6c3f8313287b622b71110'
+  actions:
+    type: object
+    description: 'Clickable buttons and icon associated with the card'
+    properties:
+      deadlineIcon:
+        description: 'Icon that appears when the current date matches the deadline'
+        type: boolean
+        example: true
+      moveButton:
+        description: 'Clickable button to move the card to another column'
+        type: string
+        example: 'arrow-circle-broken-right'
+      editButton:
+        description: 'Clickable button with an icon for editing the card details'
+        type: string
+        example: 'pencil-01'
+      deleteButton:
+        description: 'Clickable button with an icon for deleting the card'
+        type: string
+        example: 'trash-04'
+  createdAt:
+    description: 'Date and time the card was originally created'
+    type: string
+    format: date-time
+    example: '2024-10-06T12:45:15.699Z'
+  updatedAt:
+    description: 'Date and time the card was last modified'
+    type: string
+    format: date-time
+    example: '2024-10-06T12:45:15.699Z'
+  versionKey:
+    description: 'Indicates whether the document version key is included'
+    type: boolean
+    example: false

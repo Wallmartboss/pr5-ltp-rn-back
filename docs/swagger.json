@@ -2,216 +2,83 @@
   "openapi": "3.1.0",
   "info": {
     "version": "1.0.0",
-    "title": "Contacts app",
+    "title": "Task Pro app",
     "license": {
       "name": "Apache 2.0",
       "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
     },
-    "description": "This is a documentation of contacts app from 7-th homework of Node.js course"
+    "description": "This is a documentation of Task Pro app."
   },
   "servers": [
     {
-      "url": "http://localhost:3000"
+      "url": "http://127.0.0.1:3000"
     },
     {
-      "url": "https://nodejs-hw7-swagger-0ee7.onrender.com"
+      "url": "https://pr5-ltp-rn-back.onrender.com"
     }
   ],
   "tags": [
     {
-      "name": "Contacts",
-      "description": "Operations about contacts."
-    },
-    {
       "name": "Auth",
       "description": "Auth operations."
+    },
+    {
+      "name": "Users",
+      "description": "User profile and settings operations."
+    },
+    {
+      "name": "Boards",
+      "description": "Operations for managing boards."
+    },
+    {
+      "name": "Columns",
+      "description": "Operations for managing columns."
+    },
+    {
+      "name": "Cards",
+      "description": "Operations for managing tasks."
+    },
+    {
+      "name": "Help",
+      "description": "Possibility of sending a letter with a comment about help to the address - Taskpro.project@gmail.com"
     }
   ],
   "paths": {
-    "/contacts": {
-      "get": {
-        "tags": [
-          "Contacts"
-        ],
-        "summary": "Get list of contacts",
-        "operationId": "getContacts",
-        "description": "Get list of users with this endpoint",
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ],
-        "parameters": [
-          {
-            "in": "query",
-            "name": "page",
-            "schema": {
-              "type": "integer"
-            },
-            "example": 1
-          },
-          {
-            "in": "query",
-            "name": "perPage",
-            "schema": {
-              "type": "integer",
-              "example": 10
-            }
-          },
-          {
-            "in": "query",
-            "name": "sortBy",
-            "schema": {
-              "type": "string",
-              "example": "_id"
-            },
-            "description": "All contact's fields can be mentioned. Default value - _id"
-          },
-          {
-            "in": "query",
-            "name": "sortOrder",
-            "schema": {
-              "type": "string",
-              "enum": [
-                "asc",
-                "desc"
-              ],
-              "example": "asc"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Successfully found contacts!",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "required": [
-                    "status",
-                    "message",
-                    "data"
-                  ],
-                  "properties": {
-                    "status": {
-                      "type": "integer",
-                      "example": 200
-                    },
-                    "message": {
-                      "type": "string",
-                      "example": "Successfully found contacts!"
-                    },
-                    "data": {
-                      "type": "object",
-                      "required": [
-                        "data",
-                        "page",
-                        "perPage",
-                        "totalItems",
-                        "totalPages",
-                        "hasNextPage",
-                        "hasPreviousPage"
-                      ],
-                      "properties": {
-                        "data": {
-                          "type": "array",
-                          "items": {
-                            "$ref": "#/components/schemas/contact"
-                          }
-                        },
-                        "page": {
-                          "type": "number",
-                          "example": 2
-                        },
-                        "perPage": {
-                          "type": "number",
-                          "example": 4
-                        },
-                        "totalItems": {
-                          "type": "number",
-                          "example": 4
-                        },
-                        "totalPages": {
-                          "type": "number",
-                          "example": 4
-                        },
-                        "hasNextPage": {
-                          "type": "boolean",
-                          "example": false
-                        },
-                        "hasPreviousPage": {
-                          "type": "boolean",
-                          "example": true
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "401": {
-            "$ref": "#/components/responses/401"
-          }
-        }
-      },
+    "/auth/register": {
       "post": {
         "tags": [
-          "Contacts"
+          "Auth"
         ],
-        "summary": "Create contact",
-        "operationId": "createContact",
-        "description": "Create a contact with payload",
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ],
+        "summary": "Register a user",
+        "operationId": "registerUser",
+        "description": "Register a new user with payload",
+        "security": [],
         "requestBody": {
           "content": {
-            "multipart/form-data": {
+            "application/json": {
               "schema": {
                 "type": "object",
                 "required": [
                   "name",
-                  "phoneNumber",
-                  "contactType"
+                  "email",
+                  "password"
                 ],
                 "properties": {
                   "name": {
-                    "description": "contact's name",
+                    "description": "User's name",
                     "type": "string",
                     "example": "John Doe"
                   },
-                  "phoneNumber": {
-                    "description": "contact's phone number",
-                    "type": "string",
-                    "example": "+380671234567"
-                  },
                   "email": {
-                    "description": "contact's email",
+                    "description": "User's email",
                     "type": "string",
-                    "example": "rest@test.com"
+                    "example": "user@example.com"
                   },
-                  "isFavourite": {
-                    "description": "contact's isFavourite",
-                    "type": "boolean",
-                    "example": true
-                  },
-                  "contactType": {
-                    "description": "contact's type on employment",
+                  "password": {
+                    "description": "User's password",
                     "type": "string",
-                    "enum": [
-                      "work",
-                      "home",
-                      "personal"
-                    ]
-                  },
-                  "photo": {
-                    "description": "Link to contact's photo",
-                    "type": "string",
-                    "example": "https://res.cloudinary.com/uqwgdu/image/upload/image.png",
-                    "format": "binary"
+                    "format": "password",
+                    "example": "1234567890"
                   }
                 }
               }
@@ -220,7 +87,7 @@
         },
         "responses": {
           "201": {
-            "description": "Creates a contact",
+            "description": "Register a user",
             "content": {
               "application/json": {
                 "schema": {
@@ -237,123 +104,63 @@
                     },
                     "message": {
                       "type": "string",
-                      "example": "Successfully created a contact!"
+                      "example": "Successfully registered a user!"
                     },
                     "data": {
                       "type": "object",
-                      "$ref": "#/components/schemas/contact"
+                      "$ref": "#/components/schemas/user"
                     }
                   }
                 }
               }
             }
           },
-          "401": {
-            "$ref": "#/components/responses/401"
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "409": {
+            "$ref": "#/components/responses/409"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
           }
         }
       }
     },
-    "/contacts/{id}": {
-      "get": {
+    "/auth/login": {
+      "post": {
         "tags": [
-          "Contacts"
+          "Auth"
         ],
-        "summary": "Get contact by id",
-        "operationId": "getContactById",
-        "description": "Retrieve a specific contact's details by its unique ID",
+        "summary": "User login",
+        "operationId": "userLogin",
+        "description": "Login with email and password",
         "security": [
           {
             "bearerAuth": []
-          }
-        ],
-        "parameters": [
-          {
-            "in": "path",
-            "name": "id",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "example": "66d8e23bd18ecacf8d38c37c",
-              "description": "The unique identifier of the contact"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/200"
-          },
-          "404": {
-            "$ref": "#/components/responses/404"
-          }
-        }
-      },
-      "patch": {
-        "tags": [
-          "Contacts"
-        ],
-        "summary": "Patht contact",
-        "operationId": "patchContactById",
-        "description": "Patch a specific contact with the provided payload",
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ],
-        "parameters": [
-          {
-            "in": "path",
-            "name": "id",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "example": "66d8e23bd18ecacf8d38c37c",
-              "description": "The unique identifier of the contact"
-            }
           }
         ],
         "requestBody": {
+          "required": true,
           "content": {
-            "multipart/form-data": {
+            "application/json": {
               "schema": {
                 "type": "object",
-                "description": "At least one of these fields must be provided.",
-                "minProperties": 1,
+                "required": [
+                  "email",
+                  "password"
+                ],
                 "properties": {
-                  "name": {
-                    "description": "contact's name",
-                    "type": "string",
-                    "example": "John Doe"
-                  },
-                  "phoneNumber": {
-                    "description": "contact's phone number",
-                    "type": "string",
-                    "example": "+380671234567"
-                  },
                   "email": {
-                    "description": "contact's email",
+                    "description": "User's email",
                     "type": "string",
-                    "example": "test@test.com"
+                    "example": "user@example.com"
                   },
-                  "isFavourite": {
-                    "description": "Is the contact marked as a favorite?",
-                    "type": "boolean",
-                    "example": true
-                  },
-                  "contactType": {
-                    "description": "contact's type on employment",
+                  "password": {
+                    "description": "User's password",
                     "type": "string",
-                    "enum": [
-                      "work",
-                      "home",
-                      "personal"
-                    ]
-                  },
-                  "photo": {
-                    "description": "Link to contact's photo",
-                    "type": "string",
-                    "example": "https://res.cloudinary.com/uqwgdu/image/upload/image.png",
-                    "format": "binary"
+                    "format": "password",
+                    "example": "1234567890"
                   }
                 }
               }
@@ -362,23 +169,490 @@
         },
         "responses": {
           "200": {
-            "$ref": "#/components/responses/200"
+            "description": "User successfully logged in",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "status",
+                    "message",
+                    "token"
+                  ],
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Successfully logged in!"
+                    },
+                    "token": {
+                      "type": "string",
+                      "example": "Bearer token_string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        }
+      }
+    },
+    "/auth/logout": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "User logout",
+        "operationId": "userLogout",
+        "description": "Log out the user, invalidating the authentication token.",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "User successfully logged out."
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        }
+      }
+    },
+    "/users/current": {
+      "get": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Retrieve current user profile",
+        "operationId": "getCurrentUser",
+        "description": "Fetch the profile details of the currently authenticated user.",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully retrieved the user profile.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "status",
+                    "message",
+                    "data"
+                  ],
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Successfully retrieved user profile."
+                    },
+                    "data": {
+                      "type": "object",
+                      "$ref": "#/components/schemas/user"
+                    }
+                  }
+                }
+              }
+            }
           },
           "401": {
             "$ref": "#/components/responses/401"
           },
           "404": {
             "$ref": "#/components/responses/404"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        }
+      }
+    },
+    "/users/info": {
+      "patch": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Update user",
+        "operationId": "updateUser",
+        "description": "Update user. To update, you must specify at least one field.",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "description": "User's name",
+                    "example": "John Doe"
+                  },
+                  "email": {
+                    "description": "User's email",
+                    "type": "string",
+                    "example": "user@example.com"
+                  },
+                  "avatar": {
+                    "description": "User's avatar",
+                    "type": "string"
+                  }
+                },
+                "description": "Update at least one of the fields"
+              }
+            }
+          },
+          "required": false
+        },
+        "responses": {
+          "200": {
+            "description": "Update user",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "status",
+                    "message",
+                    "data"
+                  ],
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "User updated successfully!"
+                    },
+                    "data": {
+                      "type": "object",
+                      "$ref": "#/components/schemas/user"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        }
+      }
+    },
+    "/users/theme": {
+      "patch": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Update theme",
+        "operationId": "uodateTheme",
+        "description": "Update the selected theme in the user profile",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "theme"
+                ],
+                "properties": {
+                  "theme": {
+                    "description": "User's theme",
+                    "type": "string",
+                    "enum": [
+                      "light",
+                      "dark",
+                      "violet"
+                    ],
+                    "example": "dark",
+                    "default": "dark"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successfully updated theme settings.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "status",
+                    "message",
+                    "data"
+                  ],
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Theme updated successfully!"
+                    },
+                    "data": {
+                      "type": "object",
+                      "example": "dark"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        }
+      }
+    },
+    "/boards": {
+      "post": {
+        "tags": [
+          "Boards"
+        ],
+        "summary": "Create a new board",
+        "operationId": "createBoard",
+        "description": "Creates a new board with the specified title, background, icon, and owner.",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "title"
+                ],
+                "properties": {
+                  "title": {
+                    "description": "Title of the board",
+                    "type": "string",
+                    "example": "Project office"
+                  },
+                  "icon": {
+                    "description": "Icon for the board",
+                    "type": "string",
+                    "enum": [
+                      "4dot",
+                      "star",
+                      "circle",
+                      "puzzle",
+                      "cube",
+                      "lighting",
+                      "3-circle",
+                      "octagon"
+                    ],
+                    "example": "4dot",
+                    "default": "4dot"
+                  },
+                  "background": {
+                    "description": "Background image for blackboard",
+                    "type": "string",
+                    "enum": [
+                      "default-bg-mob",
+                      "bg1-2x-mob.jpg",
+                      "bg2-2x-mob.jpg",
+                      "bg3-2x-mob.jpg",
+                      "bg4-2x-mob.jpg",
+                      "bg5-2x-mob.jpg",
+                      "bg6-2x-mob.jpg",
+                      "bg7-2x-mob.jpg",
+                      "bg8-2x-mob.jpg",
+                      "bg9-2x-mob.jpg",
+                      "bg10-2x-mob.jpg",
+                      "bg11-2x-mob.jpg",
+                      "bg12-2x-mob.jpg",
+                      "bg13-2x-mob.jpg",
+                      "bg14-2x-mob.jpg",
+                      "bg15-2x-mob.jpg",
+                      "default-bg-tab",
+                      "bg1-2x-tab.jpg",
+                      "bg2-2x-tab.jpg",
+                      "bg3-2x-tab.jpg",
+                      "bg4-2x-tab.jpg",
+                      "bg5-2x-tab.jpg",
+                      "bg6-2x-tab.jpg",
+                      "bg7-2x-tab.jpg",
+                      "bg8-2x-tab.jpg",
+                      "bg9-2x-tab.jpg",
+                      "bg10-2x-tab.jpg",
+                      "bg11-2x-tab.jpg",
+                      "bg12-2x-tab.jpg",
+                      "bg13-2x-tab.jpg",
+                      "bg14-2x-tab.jpg",
+                      "bg15-2x-tab.jpg",
+                      "default-bg-desk",
+                      "bg1-2x-desk.jpg",
+                      "bg2-2x-desk.jpg",
+                      "bg3-2x-desk.jpg",
+                      "bg4-2x-desk.jpg",
+                      "bg5-2x-desk.jpg",
+                      "bg6-2x-desk.jpg",
+                      "bg7-2x-desk.jpg",
+                      "bg8-2x-desk.jpg",
+                      "bg9-2x-desk.jpg",
+                      "bg10-2x-desk.jpg",
+                      "bg11-2x-desk.jpg",
+                      "bg12-2x-desk.jpg",
+                      "bg13-2x-desk.jpg",
+                      "bg14-2x-desk.jpg",
+                      "bg15-2x-desk.jpg"
+                    ],
+                    "example": "default-bg-desk",
+                    "default": "default-bg-desk"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Board successfully created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "status",
+                    "message",
+                    "data"
+                  ],
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 201
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Board created successfully"
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/board"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
           }
         }
       },
-      "delete": {
+      "get": {
         "tags": [
-          "Contacts"
+          "Boards"
         ],
-        "summary": "Delete contact by id",
-        "operationId": "deleteContactById",
-        "description": "Delete a specific contact by its unique ID",
+        "summary": "Get boards list",
+        "operationId": "getBoards",
+        "description": "Get a list of all boards.",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Successfully found boards!",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "status",
+                    "message",
+                    "data"
+                  ],
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Successfully found boards!"
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/board"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        }
+      }
+    },
+    "/boards/{id}": {
+      "get": {
+        "tags": [
+          "Boards"
+        ],
+        "summary": "Get board by id",
+        "operationId": "getBoard",
+        "description": "Get board by id",
         "security": [
           {
             "bearerAuth": []
@@ -391,20 +665,826 @@
             "required": true,
             "schema": {
               "type": "string",
-              "example": "66d8e23bd18ecacf8d38c37c",
-              "description": "The unique identifier of the contact"
+              "example": "65ca67e7ae7f10c88b598384"
             }
           }
         ],
         "responses": {
-          "204": {
-            "description": "Contact deleted successfully. No content returned."
+          "200": {
+            "description": "Get board by id",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "status",
+                    "message",
+                    "data"
+                  ],
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Successfully found board with id 65ca67e7ae7f10c88b598384!"
+                    },
+                    "data": {
+                      "type": "object",
+                      "$ref": "#/components/schemas/board"
+                    }
+                  }
+                }
+              }
+            }
           },
           "401": {
             "$ref": "#/components/responses/401"
           },
           "404": {
             "$ref": "#/components/responses/404"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "Boards"
+        ],
+        "summary": "Update board by id",
+        "operationId": "updateBoard",
+        "description": "Update board by ID. To update, you must specify at least one field.",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Unique identifier for the board",
+            "example": "645f7a1e3a1e8c2a5d8e1b0c"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "title": {
+                    "description": "Title of the board",
+                    "type": "string",
+                    "example": "Project office"
+                  },
+                  "icon": {
+                    "description": "Icon for the board",
+                    "type": "string",
+                    "enum": [
+                      "4dot",
+                      "star",
+                      "circle",
+                      "puzzle",
+                      "cube",
+                      "lighting",
+                      "3-circle",
+                      "octagon"
+                    ],
+                    "example": "4dot",
+                    "default": "4dot"
+                  },
+                  "background": {
+                    "description": "Background image for blackboard",
+                    "type": "string",
+                    "enum": [
+                      "default-bg-mob",
+                      "bg1-2x-mob.jpg",
+                      "bg2-2x-mob.jpg",
+                      "bg3-2x-mob.jpg",
+                      "bg4-2x-mob.jpg",
+                      "bg5-2x-mob.jpg",
+                      "bg6-2x-mob.jpg",
+                      "bg7-2x-mob.jpg",
+                      "bg8-2x-mob.jpg",
+                      "bg9-2x-mob.jpg",
+                      "bg10-2x-mob.jpg",
+                      "bg11-2x-mob.jpg",
+                      "bg12-2x-mob.jpg",
+                      "bg13-2x-mob.jpg",
+                      "bg14-2x-mob.jpg",
+                      "bg15-2x-mob.jpg",
+                      "default-bg-tab",
+                      "bg1-2x-tab.jpg",
+                      "bg2-2x-tab.jpg",
+                      "bg3-2x-tab.jpg",
+                      "bg4-2x-tab.jpg",
+                      "bg5-2x-tab.jpg",
+                      "bg6-2x-tab.jpg",
+                      "bg7-2x-tab.jpg",
+                      "bg8-2x-tab.jpg",
+                      "bg9-2x-tab.jpg",
+                      "bg10-2x-tab.jpg",
+                      "bg11-2x-tab.jpg",
+                      "bg12-2x-tab.jpg",
+                      "bg13-2x-tab.jpg",
+                      "bg14-2x-tab.jpg",
+                      "bg15-2x-tab.jpg",
+                      "default-bg-desk",
+                      "bg1-2x-desk.jpg",
+                      "bg2-2x-desk.jpg",
+                      "bg3-2x-desk.jpg",
+                      "bg4-2x-desk.jpg",
+                      "bg5-2x-desk.jpg",
+                      "bg6-2x-desk.jpg",
+                      "bg7-2x-desk.jpg",
+                      "bg8-2x-desk.jpg",
+                      "bg9-2x-desk.jpg",
+                      "bg10-2x-desk.jpg",
+                      "bg11-2x-desk.jpg",
+                      "bg12-2x-desk.jpg",
+                      "bg13-2x-desk.jpg",
+                      "bg14-2x-desk.jpg",
+                      "bg15-2x-desk.jpg"
+                    ],
+                    "example": "default-bg-desk",
+                    "default": "default-bg-desk"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Board successfully updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "status",
+                    "message",
+                    "data"
+                  ],
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Successfully patched a board!"
+                    },
+                    "data": {
+                      "type": "object",
+                      "$ref": "#/components/schemas/board"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Boards"
+        ],
+        "summary": "Delete board by id",
+        "operationId": "deleteBoard",
+        "description": "Delete board by id",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "65ca67e7ae7f10c88b598384"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successfully deleted board"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        }
+      }
+    },
+    "/columns": {
+      "post": {
+        "tags": [
+          "Columns"
+        ],
+        "summary": "Create a new column",
+        "operationId": "createColumn",
+        "description": "Creates a new column with the specified title.",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "title"
+                ],
+                "properties": {
+                  "title": {
+                    "description": "Title of the column",
+                    "type": "string",
+                    "example": "New Column"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Column successfully created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "status",
+                    "message",
+                    "data"
+                  ],
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 201
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Column created successfully"
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/column"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Columns"
+        ],
+        "summary": "Get columns list",
+        "operationId": "getColumns",
+        "description": "Get a list of all columns.",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Successfully found columns!",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "status",
+                    "message",
+                    "data"
+                  ],
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Successfully found columns!"
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/column"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        }
+      }
+    },
+    "/columns/{id}": {
+      "patch": {
+        "tags": [
+          "Columns"
+        ],
+        "summary": "Update column by id",
+        "operationId": "updateColumn",
+        "description": "Update column by ID. To update, you must specify at least one field.",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Unique identifier for the column",
+            "example": "645f7a1e3a1e8c2a5d8e1b0c"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "title": {
+                    "description": "Title of the column",
+                    "type": "string",
+                    "example": "Done"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Column successfully updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "status",
+                    "message",
+                    "data"
+                  ],
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Successfully patched a column!"
+                    },
+                    "data": {
+                      "type": "object",
+                      "$ref": "#/components/schemas/column"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Columns"
+        ],
+        "summary": "Delete column by id",
+        "operationId": "deleteColumn",
+        "description": "Delete column by id",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "65ca67e7ae7f10c88b598384"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successfully deleted column"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        }
+      }
+    },
+    "/cards": {
+      "post": {
+        "tags": [
+          "Cards"
+        ],
+        "summary": "Create a new card",
+        "operationId": "creatCard",
+        "description": "Creates a new card with the specified title.",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "title",
+                  "description",
+                  "deadline"
+                ],
+                "properties": {
+                  "title": {
+                    "description": "Title of the card",
+                    "type": "string",
+                    "example": "New card"
+                  },
+                  "description": {
+                    "description": "Detailed description of the card",
+                    "type": "string",
+                    "example": "Create a visually stunning and eye-catching watch dial desing..."
+                  },
+                  "priority": {
+                    "description": "Priority level of the card",
+                    "type": "string",
+                    "enum": [
+                      "low",
+                      "medium",
+                      "high",
+                      "without"
+                    ],
+                    "example": "without",
+                    "default": "without"
+                  },
+                  "label color": {
+                    "description": "Color associated with the priority level",
+                    "type": "string",
+                    "enum": [
+                      "#8FA1D0",
+                      "#E09CB5",
+                      "#BEDBB0",
+                      "#161616"
+                    ],
+                    "example": "#161616",
+                    "default": "#161616"
+                  },
+                  "deadline": {
+                    "description": "Deadline for completing card",
+                    "type": "string",
+                    "format": "date",
+                    "example": "12/11/2024"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Card successfully created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "status",
+                    "message",
+                    "data"
+                  ],
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 201
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Column created successfully"
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/card"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        }
+      }
+    },
+    "/cards/{id}": {
+      "patch": {
+        "tags": [
+          "Cards"
+        ],
+        "summary": "Update card by id",
+        "operationId": "updateCard",
+        "description": "Update card by ID. To update, you must specify at least one field.",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Unique identifier for the card",
+            "example": "645f7a1e3a1e8c2a5d8e1b0c"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "title": {
+                    "description": "Title of the card",
+                    "type": "string",
+                    "example": "The Watch Sport Design"
+                  },
+                  "description": {
+                    "description": "Detailed description of the card",
+                    "type": "string",
+                    "example": "Create a visually stunning and eye-catching watch dial desing..."
+                  },
+                  "priority": {
+                    "description": "Priority level of the card",
+                    "type": "string",
+                    "enum": [
+                      "low",
+                      "medium",
+                      "high",
+                      "without"
+                    ],
+                    "example": "without",
+                    "default": "without"
+                  },
+                  "label color": {
+                    "description": "Color associated with the priority level",
+                    "type": "string",
+                    "enum": [
+                      "#8FA1D0",
+                      "#E09CB5",
+                      "#BEDBB0",
+                      "#161616"
+                    ],
+                    "example": "#161616",
+                    "default": "#161616"
+                  },
+                  "deadline": {
+                    "description": "Deadline for completing card",
+                    "type": "string",
+                    "format": "date",
+                    "example": "12/11/2024"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Card successfully updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "status",
+                    "message",
+                    "data"
+                  ],
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Successfully patched a card!"
+                    },
+                    "data": {
+                      "type": "object",
+                      "$ref": "#/components/schemas/card"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Cards"
+        ],
+        "summary": "Delete card by id",
+        "operationId": "deleteCard",
+        "description": "Delete card by id",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "65ca67e7ae7f10c88b598384"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successfully deleted card"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        }
+      }
+    },
+    "/help": {
+      "post": {
+        "tags": [
+          "Help"
+        ],
+        "summary": "Send help request email",
+        "operationId": "sendHelpRequest",
+        "description": "Allows users to send a help request email with comments or questions to Taskpro support.",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "email",
+                  "subject",
+                  "message"
+                ],
+                "properties": {
+                  "email": {
+                    "description": "User email address to receive a response",
+                    "type": "string",
+                    "format": "email",
+                    "example": "user@example.com"
+                  },
+                  "message": {
+                    "description": "Detailed message with comments or questions",
+                    "type": "string",
+                    "example": "I need help with creating a new column in my project."
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successfully send message about help",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "status",
+                    "message"
+                  ],
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Help request sent successfully"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
           }
         }
       }
@@ -418,68 +1498,376 @@
       }
     },
     "schemas": {
-      "contact": {
+      "user": {
         "type": "object",
         "required": [
-          "_id",
           "name",
-          "phoneNumber",
-          "contactType",
-          "userId"
+          "email",
+          "password"
         ],
         "properties": {
           "_id": {
-            "description": "contact's id",
+            "description": "User's id",
             "type": "string",
-            "example": "65e4decdd286b30065d54af9"
+            "example": "66f6c3f8313287b622b71110"
           },
           "name": {
-            "description": "contact's name",
+            "description": "User's name",
             "type": "string",
             "example": "John Doe"
           },
-          "phoneNumber": {
-            "description": "contact's phone number",
-            "type": "string",
-            "example": "+380671234567"
-          },
           "email": {
-            "description": "contact's email",
+            "description": "User's email",
             "type": "string",
-            "example": "rest@test.com"
+            "example": "user@example.com"
           },
-          "isFavourite": {
-            "description": "contact's isFavourite",
+          "theme": {
+            "description": "User's theme",
+            "enum": [
+              "light",
+              "dark",
+              "violet"
+            ],
+            "example": "dark",
+            "default": "dark"
+          },
+          "avatar": {
+            "description": "User's avatar",
+            "type": "string",
+            "format": "binary"
+          },
+          "createdAt": {
+            "description": "Date and time the user was originally created",
+            "type": "string",
+            "format": "date-time",
+            "example": "2024-10-06T12:45:15.699Z"
+          },
+          "updatedAt": {
+            "description": "Date and time the user was last modified",
+            "type": "string",
+            "format": "date-time",
+            "example": "2024-10-06T12:45:15.699Z"
+          },
+          "versionKey": {
+            "description": "Indicates whether the document version key is included. Set to false to exclude the version key (__v) in the response.",
             "type": "boolean",
-            "example": true
+            "example": false
+          }
+        }
+      },
+      "card": {
+        "type": "object",
+        "required": [
+          "title",
+          "description",
+          "priority",
+          "deadline"
+        ],
+        "properties": {
+          "_id": {
+            "description": "card's unique identifier",
+            "type": "string",
+            "example": "6702865b0b15384575dc30fa"
           },
-          "contactType": {
-            "description": "contact's type on employment",
+          "title": {
+            "description": "Title of the card",
+            "type": "string",
+            "example": "The Watch Sport Design"
+          },
+          "description": {
+            "description": "Detailed description of the card",
+            "type": "string",
+            "example": "Create a visually stunning and eye-catching watch dial desing..."
+          },
+          "priority": {
+            "description": "Priority level of the card",
             "type": "string",
             "enum": [
-              "work",
-              "home",
-              "personal"
-            ]
+              "low",
+              "medium",
+              "high",
+              "without"
+            ],
+            "example": "without",
+            "default": "without"
           },
-          "userId": {
-            "description": "user's id who has created contact",
+          "label color": {
+            "description": "Color associated with the priority level",
             "type": "string",
-            "example": "66eef6305cb56b7425569aea"
+            "enum": [
+              "#8FA1D0",
+              "#E09CB5",
+              "#BEDBB0",
+              "#161616"
+            ],
+            "example": "#161616",
+            "default": "#161616"
           },
-          "photo": {
-            "description": "Link to contact's photo",
+          "deadline": {
+            "description": "Deadline for completing card",
             "type": "string",
-            "example": "https://res.cloudinary.com/uqwgdu/image/upload/image.png"
+            "format": "date",
+            "example": "12/11/2024"
+          },
+          "column": {
+            "description": "Column the card belongs to",
+            "type": "string",
+            "example": "In Progress"
+          },
+          "owner": {
+            "description": "ID of the user who owns the board",
+            "type": "string",
+            "example": "66f6c3f8313287b622b71110"
+          },
+          "actions": {
+            "type": "object",
+            "description": "Clickable buttons and icon associated with the card",
+            "properties": {
+              "deadlineIcon": {
+                "description": "Icon that appears when the current date matches the deadline",
+                "type": "boolean",
+                "example": true
+              },
+              "moveButton": {
+                "description": "Clickable button to move the card to another column",
+                "type": "string",
+                "example": "arrow-circle-broken-right"
+              },
+              "editButton": {
+                "description": "Clickable button with an icon for editing the card details",
+                "type": "string",
+                "example": "pencil-01"
+              },
+              "deleteButton": {
+                "description": "Clickable button with an icon for deleting the card",
+                "type": "string",
+                "example": "trash-04"
+              }
+            }
+          },
+          "createdAt": {
+            "description": "Date and time the card was originally created",
+            "type": "string",
+            "format": "date-time",
+            "example": "2024-10-06T12:45:15.699Z"
+          },
+          "updatedAt": {
+            "description": "Date and time the card was last modified",
+            "type": "string",
+            "format": "date-time",
+            "example": "2024-10-06T12:45:15.699Z"
+          },
+          "versionKey": {
+            "description": "Indicates whether the document version key is included",
+            "type": "boolean",
+            "example": false
+          }
+        }
+      },
+      "column": {
+        "type": "object",
+        "required": [
+          "title"
+        ],
+        "properties": {
+          "_id": {
+            "description": "Unique identifier for the column",
+            "type": "string",
+            "example": "635f3c37e3187a9b6d56d1a1"
+          },
+          "title": {
+            "description": "Title of the column",
+            "type": "string",
+            "example": "In Progress"
+          },
+          "cards": {
+            "description": "List of cards associated with this column",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/card"
+            }
+          },
+          "owner": {
+            "description": "ID of the user who owns the board",
+            "type": "string",
+            "example": "66f6c3f8313287b622b71110"
+          },
+          "actions": {
+            "type": "object",
+            "description": "Functional buttons represented as icons to perform actions on the column",
+            "properties": {
+              "editButton": {
+                "description": "Clickable button with an icon for editing the column details",
+                "type": "string",
+                "example": "pencil-01"
+              },
+              "deleteButton": {
+                "description": "Clickable button with an icon for deleting the column",
+                "type": "string",
+                "example": "trash-04"
+              }
+            }
+          },
+          "createdAt": {
+            "description": "Timestamp of when the column was created",
+            "type": "string",
+            "format": "date-time",
+            "example": "2024-10-06T12:45:15.699Z"
+          },
+          "updatedAt": {
+            "description": "Timestamp of the last update to the column",
+            "type": "string",
+            "format": "date-time",
+            "example": "2024-10-07T12:45:15.699Z"
+          },
+          "versionKey": {
+            "description": "Indicates whether the document version key is included. Set to false to exclude the version key (__v) in the response.",
+            "type": "boolean",
+            "example": false
+          }
+        }
+      },
+      "board": {
+        "type": "object",
+        "required": [
+          "title"
+        ],
+        "properties": {
+          "_id": {
+            "description": "Unique identifier for the board",
+            "type": "string",
+            "example": "645f7a1e3a1e8c2a5d8e1b0c"
+          },
+          "title": {
+            "description": "Title of the board",
+            "type": "string",
+            "example": "Project office"
+          },
+          "icon": {
+            "description": "Icon for the board",
+            "type": "string",
+            "enum": [
+              "4dot",
+              "star",
+              "circle",
+              "puzzle",
+              "cube",
+              "lighting",
+              "3-circle",
+              "octagon"
+            ],
+            "example": "4dot",
+            "default": "4dot"
+          },
+          "background": {
+            "description": "Background image for blackboard",
+            "type": "string",
+            "enum": [
+              "default-bg-mob",
+              "bg1-2x-mob.jpg",
+              "bg2-2x-mob.jpg",
+              "bg3-2x-mob.jpg",
+              "bg4-2x-mob.jpg",
+              "bg5-2x-mob.jpg",
+              "bg6-2x-mob.jpg",
+              "bg7-2x-mob.jpg",
+              "bg8-2x-mob.jpg",
+              "bg9-2x-mob.jpg",
+              "bg10-2x-mob.jpg",
+              "bg11-2x-mob.jpg",
+              "bg12-2x-mob.jpg",
+              "bg13-2x-mob.jpg",
+              "bg14-2x-mob.jpg",
+              "bg15-2x-mob.jpg",
+              "default-bg-tab",
+              "bg1-2x-tab.jpg",
+              "bg2-2x-tab.jpg",
+              "bg3-2x-tab.jpg",
+              "bg4-2x-tab.jpg",
+              "bg5-2x-tab.jpg",
+              "bg6-2x-tab.jpg",
+              "bg7-2x-tab.jpg",
+              "bg8-2x-tab.jpg",
+              "bg9-2x-tab.jpg",
+              "bg10-2x-tab.jpg",
+              "bg11-2x-tab.jpg",
+              "bg12-2x-tab.jpg",
+              "bg13-2x-tab.jpg",
+              "bg14-2x-tab.jpg",
+              "bg15-2x-tab.jpg",
+              "default-bg-desk",
+              "bg1-2x-desk.jpg",
+              "bg2-2x-desk.jpg",
+              "bg3-2x-desk.jpg",
+              "bg4-2x-desk.jpg",
+              "bg5-2x-desk.jpg",
+              "bg6-2x-desk.jpg",
+              "bg7-2x-desk.jpg",
+              "bg8-2x-desk.jpg",
+              "bg9-2x-desk.jpg",
+              "bg10-2x-desk.jpg",
+              "bg11-2x-desk.jpg",
+              "bg12-2x-desk.jpg",
+              "bg13-2x-desk.jpg",
+              "bg14-2x-desk.jpg",
+              "bg15-2x-desk.jpg"
+            ],
+            "example": "default-bg-desk",
+            "default": "default-bg-desk"
+          },
+          "columns": {
+            "description": "List of columns and cards associated with the board",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/column"
+            }
+          },
+          "owner": {
+            "description": "ID of the user who owns the board",
+            "type": "string",
+            "example": "66f6c3f8313287b622b71110"
+          },
+          "actions": {
+            "type": "object",
+            "description": "Functional buttons represented as icons to perform actions on the board",
+            "properties": {
+              "editButton": {
+                "description": "Clickable button with an icon for deleting the board",
+                "type": "string",
+                "example": "pencil-01"
+              },
+              "deleteButton": {
+                "description": "Button to delete the board",
+                "type": "string",
+                "example": "trash-04"
+              }
+            }
+          },
+          "createdAt": {
+            "description": "Date and time the board was originally created",
+            "type": "string",
+            "format": "date-time",
+            "example": "2024-10-06T12:45:15.699Z"
+          },
+          "updatedAt": {
+            "description": "Date and time the board was last modified",
+            "type": "string",
+            "format": "date-time",
+            "example": "2024-10-07T12:45:15.699Z"
+          },
+          "versionKey": {
+            "description": "Indicates whether the document version key is included. Set to false to exclude the version key (__v) in the response.",
+            "type": "boolean",
+            "example": false
           }
         }
       }
     },
     "responses": {
-      "200": {
-        "description": "Successful operation. The contact details are returned",
+      "400": {
+        "description": "Conflict error",
         "content": {
-          "application/json": {
+          "aplication/json": {
             "schema": {
               "type": "object",
               "required": [
@@ -490,15 +1878,23 @@
               "properties": {
                 "status": {
                   "type": "integer",
-                  "example": 200
+                  "example": 400
                 },
                 "message": {
                   "type": "string",
-                  "example": "Successfully found contact with id 66d8e23bd18ecacf8d38c37c!"
+                  "example": "ConflictError"
                 },
                 "data": {
                   "type": "object",
-                  "$ref": "#/components/schemas/contact"
+                  "required": [
+                    "message"
+                  ],
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Invalid password format or email."
+                    }
+                  }
                 }
               }
             }
@@ -543,7 +1939,7 @@
         }
       },
       "404": {
-        "description": "Contact not found.",
+        "description": "Not found.",
         "content": {
           "application/json": {
             "schema": {
@@ -555,7 +1951,81 @@
                 },
                 "message": {
                   "type": "string",
-                  "example": "Contact not found"
+                  "example": "Nothing was found for your request..."
+                }
+              }
+            }
+          }
+        }
+      },
+      "409": {
+        "description": "Conflict error",
+        "content": {
+          "aplication/json": {
+            "schema": {
+              "type": "object",
+              "required": [
+                "status",
+                "message",
+                "data"
+              ],
+              "properties": {
+                "status": {
+                  "type": "integer",
+                  "example": 409
+                },
+                "message": {
+                  "type": "string",
+                  "example": "ConflictError"
+                },
+                "data": {
+                  "type": "object",
+                  "required": [
+                    "message"
+                  ],
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "User already exists or email in use"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "500": {
+        "description": "Internal Server Error",
+        "content": {
+          "aplication/json": {
+            "schema": {
+              "type": "object",
+              "required": [
+                "status",
+                "message",
+                "data"
+              ],
+              "properties": {
+                "status": {
+                  "type": "integer",
+                  "example": 500
+                },
+                "message": {
+                  "type": "string",
+                  "example": "Internal Server Error"
+                },
+                "data": {
+                  "type": "object",
+                  "required": [
+                    "message"
+                  ],
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Internal Server Error. Please try again later."
+                    }
+                  }
                 }
               }
             }

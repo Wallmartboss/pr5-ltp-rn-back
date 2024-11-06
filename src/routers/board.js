@@ -13,10 +13,10 @@ import { authenticate } from '../middlewares/authenticate.js';
 import { ctrlWrapper } from '../utils/ctrlWrapper.js';
 import { createBoardSchema, updateBoardSchema } from '../validation/board.js';
 
-
 const boardsRouter = Router();
 
 boardsRouter.get('/', authenticate, ctrlWrapper(getAllBoardsController));
+
 boardsRouter.get(
   '/:id',
   authenticate,

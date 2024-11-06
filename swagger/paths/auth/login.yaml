@@ -1,0 +1,53 @@
+tags:
+  - Auth
+summary: User login
+operationId: userLogin
+description: 'Login with email and password'
+security:
+  - bearerAuth: []
+requestBody:
+  required: true
+  content:
+    application/json:
+      schema:
+        type: object
+        required:
+          - email
+          - password
+        properties:
+          email:
+            description: "User's email"
+            type: string
+            example: 'user@example.com'
+          password:
+            description: "User's password"
+            type: string
+            format: password
+            example: '1234567890'
+responses:
+  '200':
+    description: 'User successfully logged in'
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - status
+            - message
+            - token
+          properties:
+            status:
+              type: integer
+              example: 200
+            message:
+              type: string
+              example: Successfully logged in!
+            token:
+              type: string
+              example: 'Bearer token_string'
+  '400':
+    $ref: '../../components/responses/400.yaml'
+  '401':
+    $ref: '../../components/responses/401.yaml'
+  '500':
+    $ref: '../../components/responses/500.yaml'
