@@ -38,7 +38,7 @@ export const getCardByIdController = async (req, res, next) => {
 
 export const createCardController = async (req, res, next) => {
   try {
-    const { title, description, color, boardId, columnId } = req.body;
+    const { title, description, priority, boardId, columnId } = req.body;
 
     if (
       !mongoose.Types.ObjectId.isValid(boardId) ||
@@ -47,7 +47,10 @@ export const createCardController = async (req, res, next) => {
       return res.status(400).json({ message: 'Invalid boardId or columnId' });
     }
 
-    const cardData = { title, description, color, boardId, columnId };
+
+    const cardData = { title, description, priority, boardId, columnId };
+
+  
     const newCard = await Card.create(cardData); // Змінено на newCard Леся
     console.log('Created card:', newCard);
 
