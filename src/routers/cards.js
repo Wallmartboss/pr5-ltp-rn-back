@@ -10,6 +10,7 @@ import { validateBody } from '../middlewares/validateBody.js';
 import { isValidId } from '../middlewares/isValidId.js';
 import { cardSchema } from '../validation/cards.js';
 
+
 const cardsRouter = Router({ mergeParams: true });
 
 cardsRouter.get('/', getAllCardsController);
