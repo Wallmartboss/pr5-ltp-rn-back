@@ -16,6 +16,7 @@ export const updateCard = async (cardId, boardId, payload) => {
   return await Card.findOneAndUpdate({ _id: cardId, boardId }, payload, { new: true });
 };
 
-export const deleteCard = async (cardId, boardId) => {
-  return await Card.findOneAndDelete({ _id: cardId, boardId });
+export const deleteCard = async (cardId) => {
+  return await Card.findByIdAndDelete(cardId);
 };
+

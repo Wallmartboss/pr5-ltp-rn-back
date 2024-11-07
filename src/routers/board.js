@@ -1,5 +1,4 @@
 import { Router } from 'express';
-
 import {
   getAllBoardsController,
   getBoardByIdController,
@@ -7,43 +6,28 @@ import {
   updateBoardController,
   deleteBoardController,
 } from '../controllers/boardController.js';
+import cardsRouter from './cards.js';
 import { validateBody } from '../middlewares/validateBody.js';
 import { authorizeUserBoards } from '../middlewares/authorizeUserBoards.js';
-import { authenticate } from '../middlewares/authenticate.js';
 import { ctrlWrapper } from '../utils/ctrlWrapper.js';
 import { createBoardSchema, updateBoardSchema } from '../validation/board.js';
+import { authenticate } from '../middlewares/authenticate.js';
 
 const boardsRouter = Router();
 
-boardsRouter.get('/', authenticate, ctrlWrapper(getAllBoardsController));
+boardsRouter.use(authenticate); // Додаємо аутентифікацію для всіх маршрутів
 
-boardsRouter.get(
-  '/:id',
-  authenticate,
-  authorizeUserBoards,
-  ctrlWrapper(getBoardByIdController),
-); // додала щоб лише власник дошки міг її отримати за id
+boardsRouter.get('/', ctrlWrapper(getAllBoardsController));
 
-boardsRouter.post(
-  '/',
-  authenticate,
-  validateBody(createBoardSchema),
-  ctrlWrapper(createBoardController),
-);
+boardsRouter.get('/:id', authorizeUserBoards, ctrlWrapper(getBoardByIdController));
 
-boardsRouter.patch(
-  '/:id',
-  authenticate,
-  authorizeUserBoards,
-  validateBody(updateBoardSchema),
-  ctrlWrapper(updateBoardController),
-);
+boardsRouter.post('/', validateBody(createBoardSchema), ctrlWrapper(createBoardController));
 
-boardsRouter.delete(
-  '/:id',
-  authenticate,
-  authorizeUserBoards,
-  ctrlWrapper(deleteBoardController),
-);
+boardsRouter.patch('/:id', authorizeUserBoards, validateBody(updateBoardSchema), ctrlWrapper(updateBoardController));
+
+boardsRouter.delete('/:id', authorizeUserBoards, ctrlWrapper(deleteBoardController));
+
+// Підмаршрут для карток, зв'язаних із дошкою та колонкою
+boardsRouter.use('/:boardId/columns/:columnId/cards', cardsRouter);
 
 export default boardsRouter;

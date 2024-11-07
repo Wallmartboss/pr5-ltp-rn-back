@@ -12,15 +12,13 @@
 // src/routes/index.js
 import { Router } from 'express';
 import authRouter from './auth.js';
-import cardsRouter from "./cards.js";
+import boardsRouter from './board.js'; 
 import { authenticate } from '../middlewares/authenticate.js'; 
 
 const router = Router();
 
-
 router.use('/auth', authRouter);
-
-router.use('/cards', authenticate, cardsRouter);
+router.use('/boards', authenticate, boardsRouter); 
 
 export default router;
 
