@@ -6,10 +6,10 @@ import { updateCard } from '../services/cards.js';
 
 export const getAllCardsController = async (req, res, next) => {
   try {
-    const { boardId, columnId } = req.params; // отримуємо boardId та columnId з параметрів запиту
+    const { boardId } = req.params; // отримуємо boardId та columnId з параметрів запиту
 
     // Шукаємо картки, що належать до зазначеної дошки та колонки
-    const cards = await Card.find({ boardId, columnId });
+    const cards = await Card.find({ boardId });
 
     if (!cards || cards.length === 0) {
       throw createError(404, 'No cards found in this column');
@@ -17,7 +17,7 @@ export const getAllCardsController = async (req, res, next) => {
 
     res.json({
       status: 200,
-      message: `Cards retrieved successfully for boardId ${boardId} and columnId ${columnId}`,
+      message: `Cards retrieved successfully for boardId ${boardId} `,
       data: cards,
     });
   } catch (error) {
