@@ -14,7 +14,7 @@ import { createBoardSchema, updateBoardSchema } from '../validation/board.js';
 
 import { uploadBoard } from '../middlewares/multer.js';
 import { validateBodyWithFiles } from '../middlewares/validateBodyWithFiles.js';
-
+import { authenticate } from '../middlewares/authenticate.js';
 const boardsRouter = Router();
 
 boardsRouter.get('/', authenticate, ctrlWrapper(getAllBoardsController));
@@ -49,6 +49,5 @@ boardsRouter.delete(
   authorizeUserBoards,
   ctrlWrapper(deleteBoardController),
 );
-
 
 export default boardsRouter;
