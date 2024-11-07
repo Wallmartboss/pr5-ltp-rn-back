@@ -1,4 +1,3 @@
-
 import multer from 'multer';
 import { TEMP_UPLOAD_DIR } from '../constants/index.js';
 
@@ -13,3 +12,8 @@ const storage = multer.diskStorage({
 });
 
 export const upload = multer({ storage });
+
+export const uploadBoard = multer({ storage }).fields([
+  { name: 'background', maxCount: 1 },
+  { name: 'icon', maxCount: 1 },
+]);
