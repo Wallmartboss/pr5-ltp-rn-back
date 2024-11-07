@@ -5,6 +5,7 @@ import {
   createCardController,
   updateCardController,
   deleteCardController,
+  moveCardController,
 } from '../controllers/cards.js';
 import { validateBody } from '../middlewares/validateBody.js';
 import { isValidId } from '../middlewares/isValidId.js';
@@ -17,5 +18,6 @@ cardsRouter.get('/:cardId', isValidId, getCardByIdController);
 cardsRouter.post('/', validateBody(cardSchema), createCardController);
 cardsRouter.patch('/:cardId', isValidId, validateBody(updateCardSchema), updateCardController);
 cardsRouter.delete('/:cardId', isValidId, deleteCardController);
+cardsRouter.patch('/move/:cardId', moveCardController);
 
 export default cardsRouter;

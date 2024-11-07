@@ -10,16 +10,45 @@ import { validateBody } from '../middlewares/validateBody.js';
 import { authorizeUserBoards } from '../middlewares/authorizeUserBoards.js';
 import { ctrlWrapper } from '../utils/ctrlWrapper.js';
 import { createBoardSchema, updateBoardSchema } from '../validation/board.js';
-import { authenticate } from '../middlewares/authenticate.js';
 
+import { uploadBoard } from '../middlewares/multer.js';
+import { validateBodyWithFiles } from '../middlewares/validateBodyWithFiles.js';
+import { authenticate } from '../middlewares/authenticate.js';
 const boardsRouter = Router();
 
-boardsRouter.use(authenticate); 
 
-boardsRouter.get('/', ctrlWrapper(getAllBoardsController));
-boardsRouter.get('/:id', authorizeUserBoards, ctrlWrapper(getBoardByIdController));
-boardsRouter.post('/', validateBody(createBoardSchema), ctrlWrapper(createBoardController));
-boardsRouter.patch('/:id', authorizeUserBoards, validateBody(updateBoardSchema), ctrlWrapper(updateBoardController));
-boardsRouter.delete('/:id', authorizeUserBoards, ctrlWrapper(deleteBoardController));
+boardsRouter.get('/', authenticate, ctrlWrapper(getAllBoardsController));
+
+boardsRouter.get(
+  '/:id',
+  authenticate,
+  authorizeUserBoards,
+  ctrlWrapper(getBoardByIdController),
+); // додала щоб лише власник дошки міг її отримати за id
+
+boardsRouter.post(
+  '/',
+  authenticate,
+  uploadBoard,
+  validateBody(createBoardSchema),
+  ctrlWrapper(createBoardController),
+);
+
+boardsRouter.patch(
+  '/:id',
+  authenticate,
+  authorizeUserBoards,
+  uploadBoard,
+  validateBodyWithFiles(updateBoardSchema),
+  ctrlWrapper(updateBoardController),
+);
+
+boardsRouter.delete(
+  '/:id',
+  authenticate,
+  authorizeUserBoards,
+  ctrlWrapper(deleteBoardController),
+);
+
 
 export default boardsRouter;
