@@ -77,7 +77,7 @@ export const updateBoardController = async (req, res) => {
     const { title, background, icon } = req.body;
     const boardId = req.params.id;
 
-    let updatedBackgroundUrl = background || ''; // Якщо фон не наданий, використовуємо значення по замовчуванню
+    let updatedBackgroundUrl = background || ''; // Якщо фон не наданий, використовуємо значення за замовч
     let updatedIconUrl = icon || ''; // Якщо іконка не надана, використовуємо значення по замовчуванню
 
     if (req.files) {
