@@ -1,15 +1,22 @@
 import createError from 'http-errors';
 import { Card } from '../db/cards.js';
 import mongoose from 'mongoose';
-import { Column } from '../db/columnSchema.js'; //Леся
+import { updateCard } from '../services/cards.js';
 
 export const getAllCardsController = async (req, res, next) => {
   try {
-    const { boardId } = req.params;
-    const cards = await Card.find({ boardId });
+    const { boardId, columnId } = req.params; // отримуємо boardId та columnId з параметрів запиту
+
+    // Шукаємо картки, що належать до зазначеної дошки та колонки
+    const cards = await Card.find({ boardId, columnId });
+
+    if (!cards || cards.length === 0) {
+      throw createError(404, 'No cards found in this column');
+    }
+
     res.json({
       status: 200,
-      message: 'Successfully found cards!',
+      message: `Cards retrieved successfully for boardId ${boardId} and columnId ${columnId}`,
       data: cards,
     });
   } catch (error) {
@@ -17,11 +24,13 @@ export const getAllCardsController = async (req, res, next) => {
   }
 };
 
-export const getCardByIdController = async (req, res, next) => {
+
+
+export const getCardByIdController = async (req, res, next) => { 
   try {
     const { boardId, cardId } = req.params;
     const card = await Card.findOne({ _id: cardId, boardId });
-
+    
     if (!card) {
       throw createError(404, 'Card not found');
     }
@@ -36,52 +45,35 @@ export const getCardByIdController = async (req, res, next) => {
   }
 };
 
+
 export const createCardController = async (req, res, next) => {
   try {
-    const { title, description, priority, boardId, columnId } = req.body;
+    const { title, description, priority } = req.body;
+    const { boardId, columnId } = req.params;
 
-    if (
-      !mongoose.Types.ObjectId.isValid(boardId) ||
-      !mongoose.Types.ObjectId.isValid(columnId)
-    ) {
+    if (!mongoose.Types.ObjectId.isValid(boardId) || !mongoose.Types.ObjectId.isValid(columnId)) {
       return res.status(400).json({ message: 'Invalid boardId or columnId' });
     }
 
-
     const cardData = { title, description, priority, boardId, columnId };
-
-  
-    const newCard = await Card.create(cardData); // Змінено на newCard Леся
-    console.log('Created card:', newCard);
-
-    // Додавання картки в колонку Леся
-    const updatedColumn = await Column.findByIdAndUpdate(
-      columnId,
-      { $push: { cards: newCard._id } },
-      { new: true }, // Повертає оновлену колонку
-    );
-    console.log('Column after adding card:', updatedColumn);
-    if (!updatedColumn) {
-      //Леся
-      return res.status(404).json({ message: 'Column not found' });
-    }
-
-    console.log('Updated column with new card:', updatedColumn);
-
+    const card = await Card.create(cardData);
     res.status(201).json({
       status: 201,
       message: 'Successfully created a card!',
-      data: newCard,
+      data: card,
     });
   } catch (error) {
     next(error);
   }
 };
 
+
+
+
 export const deleteCardController = async (req, res, next) => {
   try {
-    const { boardId, cardId } = req.params;
-    const task = await Card.findOneAndDelete({ _id: cardId, boardId });
+    const { cardId } = req.params;
+    const task = await Card.findByIdAndDelete(cardId);
     if (!task) {
       throw createError(404, 'Card not found');
     }
@@ -94,14 +86,17 @@ export const deleteCardController = async (req, res, next) => {
 export const updateCardController = async (req, res, next) => {
   try {
     const { boardId, cardId } = req.params;
-    const updatedTask = await Card.findOneAndUpdate(
-      { _id: cardId, boardId },
-      req.body,
-      { new: true },
-    );
+    const { newColumnId } = req.body;  
+
+    const updatedTask = await updateCard(cardId, boardId, { 
+      ...req.body, 
+      newColumnId 
+    });
+
     if (!updatedTask) {
       throw createError(404, 'Card not found');
     }
+
     res.json({
       status: 200,
       message: `Successfully updated Card with id ${cardId}!`,
@@ -111,3 +106,5 @@ export const updateCardController = async (req, res, next) => {
     next(error);
   }
 };
+
+
