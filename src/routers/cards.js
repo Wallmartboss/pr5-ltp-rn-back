@@ -5,6 +5,7 @@ import {
   createCardController,
   updateCardController,
   deleteCardController,
+  moveCardController,
 } from '../controllers/cards.js';
 import { validateBody } from '../middlewares/validateBody.js';
 import { isValidId } from '../middlewares/isValidId.js';
@@ -15,7 +16,13 @@ const cardsRouter = Router({ mergeParams: true }); // `mergeParams` для до�
 cardsRouter.get('/', getAllCardsController);
 cardsRouter.get('/:cardId', isValidId, getCardByIdController);
 cardsRouter.post('/', validateBody(cardSchema), createCardController);
-cardsRouter.patch('/:cardId', isValidId, validateBody(cardSchema), updateCardController);
+cardsRouter.patch(
+  '/:cardId',
+  isValidId,
+  validateBody(cardSchema),
+  updateCardController,
+);
 cardsRouter.delete('/:cardId', isValidId, deleteCardController);
+cardsRouter.patch('/move/:cardId', moveCardController);
 
 export default cardsRouter;

@@ -1,5 +1,6 @@
 import createError from 'http-errors';
 import { Card } from '../db/cards.js';
+import { Column } from '../db/columnSchema.js';
 import mongoose from 'mongoose';
 import { updateCard } from '../services/cards.js';
 
@@ -24,13 +25,11 @@ export const getAllCardsController = async (req, res, next) => {
   }
 };
 
-
-
-export const getCardByIdController = async (req, res, next) => { 
+export const getCardByIdController = async (req, res, next) => {
   try {
     const { boardId, cardId } = req.params;
     const card = await Card.findOne({ _id: cardId, boardId });
-    
+
     if (!card) {
       throw createError(404, 'Card not found');
     }
@@ -45,13 +44,15 @@ export const getCardByIdController = async (req, res, next) => {
   }
 };
 
-
 export const createCardController = async (req, res, next) => {
   try {
     const { title, description, priority } = req.body;
     const { boardId, columnId } = req.params;
 
-    if (!mongoose.Types.ObjectId.isValid(boardId) || !mongoose.Types.ObjectId.isValid(columnId)) {
+    if (
+      !mongoose.Types.ObjectId.isValid(boardId) ||
+      !mongoose.Types.ObjectId.isValid(columnId)
+    ) {
       return res.status(400).json({ message: 'Invalid boardId or columnId' });
     }
 
@@ -66,9 +67,6 @@ export const createCardController = async (req, res, next) => {
     next(error);
   }
 };
-
-
-
 
 export const deleteCardController = async (req, res, next) => {
   try {
@@ -86,11 +84,11 @@ export const deleteCardController = async (req, res, next) => {
 export const updateCardController = async (req, res, next) => {
   try {
     const { boardId, cardId } = req.params;
-    const { newColumnId } = req.body;  
+    const { newColumnId } = req.body;
 
-    const updatedTask = await updateCard(cardId, boardId, { 
-      ...req.body, 
-      newColumnId 
+    const updatedTask = await updateCard(cardId, boardId, {
+      ...req.body,
+      newColumnId,
     });
 
     if (!updatedTask) {
@@ -107,4 +105,34 @@ export const updateCardController = async (req, res, next) => {
   }
 };
 
+export const moveCardController = async (req, res, next) => {
+  try {
+    const { cardId } = req.params;
+    const { columnId } = req.body;
 
+    if (!cardId || !columnId) {
+      return next(createError(400, 'Card ID and Column ID are required.'));
+    }
+    const card = await Card.findById(cardId);
+    if (!card) {
+      return next(createError(404, 'Card not found.'));
+    }
+    card.columnId = columnId;
+    await card.save();
+    const targetColumn = await Column.findById(columnId);
+    if (!targetColumn) {
+      return next(createError(404, 'Target column not found.'));
+    }
+    if (!targetColumn.cards.includes(card._id)) {
+      targetColumn.cards.push(card._id);
+      await targetColumn.save();
+    }
+    res.status(200).json({
+      message: 'Card moved successfully',
+      card,
+    });
+  } catch (error) {
+    console.error('Error while moving card:', error);
+    next(error);
+  }
+};
