@@ -1,7 +1,12 @@
 import createHttpError from 'http-errors';
+import bcrypt from 'bcrypt';
 import { UsersCollection } from '../db/user.js';
 
 export const updateUser = async (userId, payload, options = {}) => {
+  if (payload.password) {
+    const saltRounds = 10;
+    payload.password = await bcrypt.hash(payload.password, saltRounds);
+  }
   const rawResult = await UsersCollection.findOneAndUpdate(
     { _id: userId },
     payload,

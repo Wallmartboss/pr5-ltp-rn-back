@@ -7,9 +7,9 @@ const cardSchema = new mongoose.Schema({
   description: { 
     type: String, required: true 
   },
-  color: { 
+  priority: { 
     type: String, 
-    enum: ['blue', 'pink', 'green', 'gray'], 
+    enum: ['low', 'medium', 'high', 'without'], 
     required: true 
   },
   date: { 

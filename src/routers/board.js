@@ -1,5 +1,4 @@
 import { Router } from 'express';
-
 import {
   getAllBoardsController,
   getBoardByIdController,
@@ -7,11 +6,12 @@ import {
   updateBoardController,
   deleteBoardController,
 } from '../controllers/boardController.js';
+import cardsRouter from './cards.js';
 import { validateBody } from '../middlewares/validateBody.js';
 import { authorizeUserBoards } from '../middlewares/authorizeUserBoards.js';
-import { authenticate } from '../middlewares/authenticate.js';
 import { ctrlWrapper } from '../utils/ctrlWrapper.js';
 import { createBoardSchema, updateBoardSchema } from '../validation/board.js';
+
 import { uploadBoard } from '../middlewares/multer.js';
 import { validateBodyWithFiles } from '../middlewares/validateBodyWithFiles.js';
 
@@ -49,5 +49,6 @@ boardsRouter.delete(
   authorizeUserBoards,
   ctrlWrapper(deleteBoardController),
 );
+
 
 export default boardsRouter;
