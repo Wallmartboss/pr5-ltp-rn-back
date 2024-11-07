@@ -9,6 +9,6 @@ export const createBoardSchema = Joi.object({
 
 export const updateBoardSchema = Joi.object({
   title: Joi.string().min(3).max(50).optional(),
-  background: Joi.string().uri().optional(),
+  background: Joi.string().optional(),
   icon: Joi.string().optional(),
-}).min(1); // мінімум одне поле для оновлення
+}).min(1); // Мінімум одне поле для оновлення
