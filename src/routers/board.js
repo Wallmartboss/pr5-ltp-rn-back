@@ -12,6 +12,8 @@ import { authorizeUserBoards } from '../middlewares/authorizeUserBoards.js';
 import { authenticate } from '../middlewares/authenticate.js';
 import { ctrlWrapper } from '../utils/ctrlWrapper.js';
 import { createBoardSchema, updateBoardSchema } from '../validation/board.js';
+import { uploadBoard } from '../middlewares/multer.js';
+import { validateBodyWithFiles } from '../middlewares/validateBodyWithFiles.js';
 
 const boardsRouter = Router();
 
@@ -27,6 +29,7 @@ boardsRouter.get(
 boardsRouter.post(
   '/',
   authenticate,
+  uploadBoard,
   validateBody(createBoardSchema),
   ctrlWrapper(createBoardController),
 );
@@ -35,7 +38,8 @@ boardsRouter.patch(
   '/:id',
   authenticate,
   authorizeUserBoards,
-  validateBody(updateBoardSchema),
+  uploadBoard,
+  validateBodyWithFiles(updateBoardSchema),
   ctrlWrapper(updateBoardController),
 );
 
