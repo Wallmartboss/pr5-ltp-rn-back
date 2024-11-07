@@ -1,20 +1,29 @@
 import createError from 'http-errors';
 import { Card } from '../db/cards.js';
 import mongoose from 'mongoose';
+import { updateCard } from '../services/cards.js';
 
 export const getAllCardsController = async (req, res, next) => {
   try {
-    const { boardId } = req.params;
-    const cards = await Card.find({ boardId });
+    const { boardId, columnId } = req.params; // отримуємо boardId та columnId з параметрів запиту
+
+    // Шукаємо картки, що належать до зазначеної дошки та колонки
+    const cards = await Card.find({ boardId, columnId });
+
+    if (!cards || cards.length === 0) {
+      throw createError(404, 'No cards found in this column');
+    }
+
     res.json({
       status: 200,
-      message: 'Successfully found cards!',
+      message: `Cards retrieved successfully for boardId ${boardId} and columnId ${columnId}`,
       data: cards,
     });
   } catch (error) {
     next(error);
   }
 };
+
 
 
 export const getCardByIdController = async (req, res, next) => { 
@@ -76,13 +85,13 @@ export const deleteCardController = async (req, res, next) => {
 
 export const updateCardController = async (req, res, next) => {
   try {
-    const { boardId, columnId, cardId } = req.params;
+    const { boardId, cardId } = req.params;
+    const { newColumnId } = req.body;  
 
-    const updatedTask = await Card.findOneAndUpdate(
-      { _id: cardId, boardId, columnId },
-      req.body,
-      { new: true }
-    );
+    const updatedTask = await updateCard(cardId, boardId, { 
+      ...req.body, 
+      newColumnId 
+    });
 
     if (!updatedTask) {
       throw createError(404, 'Card not found');
@@ -97,4 +106,5 @@ export const updateCardController = async (req, res, next) => {
     next(error);
   }
 };
+
 

@@ -13,8 +13,15 @@ export const createCard = async (payload) => {
 };
 
 export const updateCard = async (cardId, boardId, payload) => {
+  const { newColumnId } = payload;
+
+  
+  if (newColumnId) {
+    payload.columnId = newColumnId;
+  }
   return await Card.findOneAndUpdate({ _id: cardId, boardId }, payload, { new: true });
 };
+
 
 export const deleteCard = async (cardId) => {
   return await Card.findByIdAndDelete(cardId);
