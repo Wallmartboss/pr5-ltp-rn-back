@@ -6,7 +6,6 @@ import {
   updateBoardController,
   deleteBoardController,
 } from '../controllers/boardController.js';
-import cardsRouter from './cards.js';
 import { validateBody } from '../middlewares/validateBody.js';
 import { authorizeUserBoards } from '../middlewares/authorizeUserBoards.js';
 import { ctrlWrapper } from '../utils/ctrlWrapper.js';
@@ -16,6 +15,7 @@ import { uploadBoard } from '../middlewares/multer.js';
 import { validateBodyWithFiles } from '../middlewares/validateBodyWithFiles.js';
 import { authenticate } from '../middlewares/authenticate.js';
 const boardsRouter = Router();
+
 
 boardsRouter.get('/', authenticate, ctrlWrapper(getAllBoardsController));
 
@@ -49,5 +49,6 @@ boardsRouter.delete(
   authorizeUserBoards,
   ctrlWrapper(deleteBoardController),
 );
+
 
 export default boardsRouter;

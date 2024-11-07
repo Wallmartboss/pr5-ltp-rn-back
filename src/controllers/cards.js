@@ -6,10 +6,12 @@ import { updateCard } from '../services/cards.js';
 
 export const getAllCardsController = async (req, res, next) => {
   try {
+
     const { boardId } = req.params; // отримуємо boardId та columnId з параметрів запиту
 
     // Шукаємо картки, що належать до зазначеної дошки та колонки
     const cards = await Card.find({ boardId });
+
 
     if (!cards || cards.length === 0) {
       throw createError(404, 'No cards found in this column');
@@ -25,9 +27,12 @@ export const getAllCardsController = async (req, res, next) => {
   }
 };
 
+
 export const getCardByIdController = async (req, res, next) => {
+
   try {
-    const { boardId, cardId } = req.params;
+    const { boardId } = req.body;
+    const { cardId } = req.params;
     const card = await Card.findOne({ _id: cardId, boardId });
 
     if (!card) {
@@ -46,8 +51,7 @@ export const getCardByIdController = async (req, res, next) => {
 
 export const createCardController = async (req, res, next) => {
   try {
-    const { title, description, priority } = req.body;
-    const { boardId, columnId } = req.params;
+    const { title, description, priority, boardId, columnId } = req.body;
 
     if (
       !mongoose.Types.ObjectId.isValid(boardId) ||
@@ -83,22 +87,31 @@ export const deleteCardController = async (req, res, next) => {
 
 export const updateCardController = async (req, res, next) => {
   try {
-    const { boardId, cardId } = req.params;
-    const { newColumnId } = req.body;
 
-    const updatedTask = await updateCard(cardId, boardId, {
-      ...req.body,
-      newColumnId,
-    });
+    const { cardId } = req.params; // Беремо cardId з параметрів URL
+    const { boardId, newColumnId, ...updateData } = req.body; // boardId та інші дані — з тіла запиту
 
-    if (!updatedTask) {
+    // Перевірка валідності boardId та cardId
+    if (!mongoose.Types.ObjectId.isValid(cardId) || !mongoose.Types.ObjectId.isValid(boardId)) {
+      return res.status(400).json({ message: 'Invalid cardId or boardId format' });
+    }
+
+    // Якщо є новий columnId, оновлюємо columnId картки
+    if (newColumnId) {
+      updateData.columnId = newColumnId;
+    }
+
+
+    const updatedCard = await updateCard(cardId, boardId, updateData);
+
+    if (!updatedCard) {
       throw createError(404, 'Card not found');
     }
 
     res.json({
       status: 200,
       message: `Successfully updated Card with id ${cardId}!`,
-      data: updatedTask,
+      data: updatedCard,
     });
   } catch (error) {
     next(error);
@@ -109,6 +122,7 @@ export const moveCardController = async (req, res, next) => {
   try {
     const { cardId } = req.params;
     const { columnId } = req.body;
+
 
     if (!cardId || !columnId) {
       return next(createError(400, 'Card ID and Column ID are required.'));
@@ -136,3 +150,4 @@ export const moveCardController = async (req, res, next) => {
     next(error);
   }
 };
+
