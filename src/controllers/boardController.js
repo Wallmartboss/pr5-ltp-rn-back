@@ -22,7 +22,6 @@ export const getAllBoardsController = async (req, res) => {
 
 export const getBoardByIdController = async (req, res) => {
   try {
-    // console.log('Request received for board ID:', req.params.id);
     const board = await getBoardById(req.params.id);
     res.json(board);
   } catch (error) {
