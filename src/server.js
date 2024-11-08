@@ -15,6 +15,18 @@ export const setupServer = () => {
   const app = express();
 
   app.use(express.json());
+
+  app.options('*', (req, res) => {
+    res.header(
+      'Access-Control-Allow-Origin',
+      'https://pr5-ltp-rn-front.vercel.app',
+    );
+    res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE');
+    res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+    res.header('Access-Control-Allow-Credentials', 'true');
+    res.sendStatus(204); // success
+  });
+
   app.options(
     '*',
     cors({
