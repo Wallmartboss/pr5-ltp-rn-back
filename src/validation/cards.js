@@ -6,7 +6,7 @@ export const cardSchema = Joi.object({
   priority: Joi.string().valid('low', 'medium', 'high', 'without').required(),
   date: Joi.date().optional(),
   boardId: Joi.string().required(),
-  columnId: Joi.string().required(),
+  columnId: Joi.string().optional(),
   newColumnId: Joi.string().optional(),
 });
 

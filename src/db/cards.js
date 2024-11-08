@@ -24,7 +24,7 @@ const cardSchema = new mongoose.Schema({
   columnId: { 
     type: mongoose.Schema.Types.ObjectId,
     ref: 'columns', 
-    required: true 
+    required: false 
   }
 },
 {

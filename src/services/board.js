@@ -14,12 +14,15 @@ export const getBoardById = async (id) => {
   const board = await Board.findById(id)
     .populate({
       path: 'columns',
-      populate: { path: 'cards', model: 'Card' },
+      populate: {
+        path: 'cards', 
+        model: 'Card',
+      },
     })
-    .lean(); //Леся
+    .lean();  
+
   console.log('Fetched board with populated columns and cards:', board);
 
-  //закомент.якщо не потрібні дані колонок у відповіді
   if (!board) {
     throw createHttpError(404, 'Board not found');
   }
