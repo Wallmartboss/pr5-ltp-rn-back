@@ -18,11 +18,8 @@ router.post(
     methods: ['POST'],
     credentials: true,
   }),
-  (req, res) => {
-    validateBody(registerUserSchema),
-      ctrlWrapper(registerUserController),
-      res.send({ message: 'Registered successfully' });
-  },
+  validateBody(registerUserSchema),
+  ctrlWrapper(registerUserController),
 );
 router.post(
   '/login',
