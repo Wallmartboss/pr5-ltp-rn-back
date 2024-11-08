@@ -24,7 +24,7 @@ export const registerUser = async (payload) => {
 
     const { password, ...userData } = newUser.toObject();
 
-    return userData; /
+    return userData;
   } catch (error) {
     console.error('Error during registration:', error);
     throw error;
