@@ -3,17 +3,16 @@ import {
   loginUser,
   logoutUser,
   registerUser,
-//   refreshUsersSession,
+  //   refreshUsersSession,
 } from '../services/auth.js';
 
-export const registerUserController = async (req, res) => {
-  const user = await registerUser(req.body);
-
-  res.status(201).json({
-    status: 201,
-    message: 'Successfully registered a user!',
-    data: user,
-  });
+export const registerUserController = async (req, res, next) => {
+  try {
+    const user = await registerUser(req.body);
+    res.status(201).json({ message: 'User registered successfully', user });
+  } catch (error) {
+    next(error);
+  }
 };
 
 export const loginUserController = async (req, res) => {
@@ -46,5 +45,3 @@ export const logoutUserController = async (req, res) => {
 
   res.status(204).send();
 };
-
-
