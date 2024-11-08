@@ -15,7 +15,8 @@ export const setupServer = () => {
   const app = express();
 
   app.use(express.json());
-  app.use(
+  app.options(
+    '*',
     cors({
       origin: ['http://localhost:5173', 'https://pr5-ltp-rn-front.vercel.app/'],
       methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
