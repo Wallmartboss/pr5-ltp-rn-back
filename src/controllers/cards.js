@@ -53,24 +53,42 @@ export const createCardController = async (req, res, next) => {
   try {
     const { title, description, priority, boardId, columnId } = req.body;
 
-    if (
-      !mongoose.Types.ObjectId.isValid(boardId) ||
-      !mongoose.Types.ObjectId.isValid(columnId)
-    ) {
-      return res.status(400).json({ message: 'Invalid boardId or columnId' });
+    if (!mongoose.Types.ObjectId.isValid(boardId)) {
+      return res.status(400).json({ message: 'Invalid boardId' });
+    }
+
+    if (columnId && !mongoose.Types.ObjectId.isValid(columnId)) {
+      return res.status(400).json({ message: 'Invalid columnId' });
     }
 
     const cardData = { title, description, priority, boardId, columnId };
-    const card = await Card.create(cardData);
+    const newCard = await Card.create(cardData);
+    console.log('Created card:', newCard);
+
+    if (columnId) {
+      const updatedColumn = await Column.findByIdAndUpdate(
+        columnId,
+        { $push: { cards: newCard._id } },
+        { new: true }
+      );
+
+      if (!updatedColumn) {
+        return res.status(404).json({ message: 'Column not found' });
+      }
+
+      console.log('Updated column with new card:', updatedColumn);
+    }
+
     res.status(201).json({
       status: 201,
       message: 'Successfully created a card!',
-      data: card,
+      data: newCard,
     });
   } catch (error) {
     next(error);
   }
 };
+
 
 export const deleteCardController = async (req, res, next) => {
   try {
@@ -87,25 +105,25 @@ export const deleteCardController = async (req, res, next) => {
 
 export const updateCardController = async (req, res, next) => {
   try {
+    const { cardId } = req.params;
+    const { boardId, newColumnId, ...updateData } = req.body;
 
-    const { cardId } = req.params; // Беремо cardId з параметрів URL
-    const { boardId, newColumnId, ...updateData } = req.body; // boardId та інші дані — з тіла запиту
-
-    // Перевірка валідності boardId та cardId
     if (!mongoose.Types.ObjectId.isValid(cardId) || !mongoose.Types.ObjectId.isValid(boardId)) {
       return res.status(400).json({ message: 'Invalid cardId or boardId format' });
     }
 
-    // Якщо є новий columnId, оновлюємо columnId картки
     if (newColumnId) {
       updateData.columnId = newColumnId;
     }
-
 
     const updatedCard = await updateCard(cardId, boardId, updateData);
 
     if (!updatedCard) {
       throw createError(404, 'Card not found');
+    }
+
+    if (newColumnId) {
+      await Column.findByIdAndUpdate(newColumnId, { $push: { cards: updatedCard._id } }, { new: true });
     }
 
     res.json({
@@ -117,6 +135,7 @@ export const updateCardController = async (req, res, next) => {
     next(error);
   }
 };
+
 
 export const moveCardController = async (req, res, next) => {
   try {
@@ -150,4 +169,3 @@ export const moveCardController = async (req, res, next) => {
     next(error);
   }
 };
-
