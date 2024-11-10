@@ -10,6 +10,8 @@ requestBody:
     multipart/form-data:
       schema:
         type: object
+        required:
+          - avatar
         properties:
           name:
             type: string

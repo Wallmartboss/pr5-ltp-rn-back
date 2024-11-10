@@ -19,6 +19,8 @@ requestBody:
     multipart/form-data:
       schema:
         type: object
+        required:
+          - icon
         properties:
           title:
             description: 'Title of the board'

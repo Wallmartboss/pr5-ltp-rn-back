@@ -66,11 +66,19 @@ paths:
   /cards:
     post:
       $ref: ../swagger/paths/cards/post.yaml
+  /cards/boardId:
+    get:
+      $ref: ../swagger/paths/cards/boardId/get.yaml
   /cards/{id}:
+    get:
+      $ref: ../swagger/paths/cards/{id}/get.yaml
     patch:
       $ref: ../swagger/paths/cards/patch.yaml
     delete:
       $ref: ../swagger/paths/cards/delete.yaml
+  /cards/move:
+    patch:
+      $ref: ../swagger/paths/cards/move/patch.yaml
   /help:
     post:
       $ref: ../swagger/paths/help/post.yaml
