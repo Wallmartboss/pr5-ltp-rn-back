@@ -13,7 +13,6 @@ import { cardSchema, updateCardSchema } from '../validation/cards.js';
 
 const cardsRouter = Router();
 
-cardsRouter.get('/', getAllCardsController);
 cardsRouter.get('/:boardId', getAllCardsController);
 cardsRouter.get('/:cardId', isValidId('cardId'), getCardByIdController);
 cardsRouter.post('/', validateBody(cardSchema), createCardController);
