@@ -18,13 +18,19 @@ export const setupServer = () => {
 
   app.use(
     cors({
-      origin: ['http://localhost:5173', 'https://pr5-ltp-rn-front.vercel.app/'],
+      origin: [
+        'http://localhost:5173',
+        'http://localhost:3000',
+        'http://localhost:3001',
+        'https://pr5-ltp-rn-front.vercel.app/',
+      ],
       methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
       allowedHeaders: ['Content-Type', 'Authorization'],
-      credentials: true,
+      credentials: false,
     }),
   );
-  app.use(cookieParser());
+  // app.use(cookieParser());
+
   // app.use('/uploads', express.static(UPLOAD_DIR));
   app.use('/api-docs', swaggerDocs());
   app.use(
