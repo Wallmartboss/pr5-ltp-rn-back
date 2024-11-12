@@ -14,7 +14,7 @@ const router = Router();
 router.post(
   '/register',
   cors({
-    origin: ['https://pr5-ltp-rn-front.vercel.app', 'http://localhost:5173'],
+    origin: ['*'], //https://pr5-ltp-rn-front.vercel.app', 'http://localhost:5173
     methods: ['POST'],
     credentials: false,
   }),
@@ -23,6 +23,11 @@ router.post(
 );
 router.post(
   '/login',
+  cors({
+    origin: ['*'], //https://pr5-ltp-rn-front.vercel.app', 'http://localhost:5173
+    methods: ['POST'],
+    credentials: false,
+  }),
   validateBody(loginUserSchema),
   ctrlWrapper(loginUserController),
 );
