@@ -17,17 +17,7 @@ export const setupServer = () => {
   app.use(express.json());
 
   app.use(
-    cors({
-      origin: [
-        'http://localhost:5173',
-        'http://localhost:3000',
-        'http://localhost:3001',
-        'https://pr5-ltp-rn-front.vercel.app/',
-      ],
-      methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
-      allowedHeaders: ['Content-Type', 'Authorization'],
-      credentials: false,
-    }),
+    cors(),
   );
   // app.use(cookieParser());
 
