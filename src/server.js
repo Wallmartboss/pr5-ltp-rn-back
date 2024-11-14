@@ -26,7 +26,7 @@ export const setupServer = () => {
       ],
       methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
       allowedHeaders: ['Content-Type', 'Authorization'],
-      credentials: true,
+      credentials: false,
     }),
   );
   // app.use(cookieParser());
