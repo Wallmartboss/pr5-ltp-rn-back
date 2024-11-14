@@ -2,7 +2,7 @@ import Joi from 'joi';
 
 export const createBoardSchema = Joi.object({
   title: Joi.string().min(3).max(50).required(),
-  background: Joi.string().uri().allow('').optional(),
+  background: Joi.string().allow('').optional(),
   icon: Joi.string().allow('').optional(),
   owner: Joi.string().optional(), //тут можливо треба required()
 });
