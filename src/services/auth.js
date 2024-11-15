@@ -7,16 +7,43 @@ import { UsersCollection } from '../db/user.js';
 import { SessionsCollection } from '../db/session.js';
 
 export const registerUser = async (payload) => {
-  const user = await UsersCollection.findOne({ email: payload.email });
-  if (user) throw createHttpError(409, 'Email in use');
+  try {
 
-  const encryptedPassword = await bcrypt.hash(payload.password, 10);
+    const user = await UsersCollection.findOne({ email: payload.email });
+    if (user) {
+      console.log('Email is already in use!');
 
-  return await UsersCollection.create({
-    ...payload,
-    password: encryptedPassword,
-  });
+      throw createHttpError(409, 'Email is already in use');
+    }
+    const encryptedPassword = await bcrypt.hash(payload.password, 10);
+    const newUser = await UsersCollection.create({
+      ...payload,
+      password: encryptedPassword,
+    });
+
+
+    const { password, ...userData } = newUser.toObject();
+
+    return userData;
+  } catch (error) {
+    console.error('Error during registration:', error);
+    throw error;
+  }
 };
+//   console.log(payload);
+//   const user = await UsersCollection.findOne({ email: payload.email });
+//   if (user) {
+//     console.log('Email уже используется');
+//     throw createHttpError(409, 'Email is already in use');
+//   }
+
+//   const encryptedPassword = await bcrypt.hash(payload.password, 10);
+
+//   return await UsersCollection.create({
+//     ...payload,
+//     password: encryptedPassword,
+//   });
+// };
 
 export const loginUser = async (payload) => {
   const user = await UsersCollection.findOne({ email: payload.email });

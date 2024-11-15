@@ -6,7 +6,8 @@ export const getAllColumns = async (boardId) => {
   console.log('Fetching columns for board ID:', boardId);
   const columns = await Column.find({
     board: boardId,
-  });
+  }).populate('cards');
+  console.log(columns);
   return columns;
 };
 

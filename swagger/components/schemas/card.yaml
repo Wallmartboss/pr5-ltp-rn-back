@@ -23,12 +23,6 @@ properties:
     enum: ['low', 'medium', 'high', 'without']
     example: 'without'
     default: 'without'
-  label color:
-    description: 'Color associated with the priority level'
-    type: string
-    enum: ['#8FA1D0', '#E09CB5', '#BEDBB0', '#161616']
-    example: '#161616'
-    default: '#161616'
   deadline:
     description: 'Deadline for completing card'
     type: string
