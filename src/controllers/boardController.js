@@ -40,28 +40,17 @@ export const getBoardByIdController = async (req, res) => {
 
 export const createBoardController = async (req, res) => {
   try {
-    const { title } = req.body;
+    const { title, icon, background } = req.body; // Отримуємо icon та background як рядки
     const owner = req.user.id;
-    let backgroundUrl, iconUrl;
 
-    if (req.files && req.files.background) {
-      backgroundUrl =
-        env('ENABLE_CLOUDINARY') === 'true'
-          ? await saveFileToCloudinary(req.files.background[0])
-          : await saveFileToUploadDir(req.files.background[0]);
-    }
-
-    if (req.files && req.files.icon) {
-      iconUrl =
-        env('ENABLE_CLOUDINARY') === 'true'
-          ? await saveFileToCloudinary(req.files.icon[0])
-          : await saveFileToUploadDir(req.files.icon[0]);
-    }
+    // Якщо icon або background передаються як строки, просто присвоюємо їх значення
+    const backgroundUrl = background || ''; // Якщо background не передано, залишаємо порожнім
+    const iconUrl = icon || ''; // Якщо icon не передано, залишаємо порожнім
 
     const newBoard = await createBoard({
       title,
-      background: backgroundUrl || '',
-      icon: iconUrl || '',
+      background: backgroundUrl,
+      icon: iconUrl,
       owner,
     });
 
