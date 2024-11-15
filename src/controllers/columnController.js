@@ -14,6 +14,7 @@ export const getAllColumnsController = async (req, res) => {
     res.status(500).json({ message: 'Internal Server Error' });
   }
 };
+
 export const postColumn = async (req, res) => {
   try {
     const { title } = req.body; // Отримуємо дані з тіла запиту
@@ -33,6 +34,8 @@ export const postColumn = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+
+
 export const updateById = async (req, res) => {
   try {
     const { columnId } = req.params;
