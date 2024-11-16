@@ -123,17 +123,28 @@ export const updateCardController = async (req, res, next) => {
     }
 
     if (newColumnId) {
-      updateData.columnId = newColumnId;
+      updateData.columnId = newColumnId;  
     }
 
-    const updatedCard = await updateCard(cardId, boardId, updateData);
+    const updatedCard = await updateCard(cardId, boardId, updateData); 
 
     if (!updatedCard) {
       throw createError(404, 'Card not found');
     }
 
+
     if (newColumnId) {
-      await Column.findByIdAndUpdate(newColumnId, { $push: { cards: updatedCard._id } }, { new: true });
+      await Column.findByIdAndUpdate(
+        updatedCard.columnId,
+        { $pull: { cards: updatedCard._id } },
+        { new: true }
+      );
+
+      await Column.findByIdAndUpdate(
+        newColumnId,
+        { $push: { cards: updatedCard._id } },
+        { new: true }
+      );
     }
 
     res.json({
