@@ -1,0 +1,53 @@
+tags:
+  - Cards
+summary: Move card to a different column
+operationId: moveCardById
+description: 'Move a card to a specified column by providing the card ID and target column ID.'
+security:
+  - bearerAuth: []
+requestBody:
+  required: true
+  content:
+    application/json:
+      schema:
+        type: object
+        required:
+          - cardId
+          - columnId
+        properties:
+          cardId:
+            type: string
+            description: 'ID of the target card that will be moved.'
+            example: '645f7a1e3a1e8c2a5d8e1b0c'
+          columnId:
+            type: string
+            description: 'ID of the target column where the card will be moved'
+            example: '64b3f12e4dcb23a8c7f6a34e'
+responses:
+  '200':
+    description: 'Card successfully moved to the target column'
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - status
+            - message
+            - data
+          properties:
+            status:
+              type: integer
+              example: 200
+            message:
+              type: string
+              example: Card moved successfully!
+            data:
+              type: array
+              items:
+                $ref: ../../../components/schemas/card.yaml
+  '401':
+    $ref: '../../../components/responses/401.yaml'
+  '404':
+    $ref: '../../../components/responses/404.yaml'
+  '500':
+    $ref: '../../../components/responses/500.yaml'

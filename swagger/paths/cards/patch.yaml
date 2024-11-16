@@ -19,6 +19,8 @@ requestBody:
     application/json:
       schema:
         type: object
+        required:
+          - description
         properties:
           title:
             description: 'Title of the card'
