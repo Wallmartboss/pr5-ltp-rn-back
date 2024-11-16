@@ -51,7 +51,7 @@ export const getCardByIdController = async (req, res, next) => {
 
 export const createCardController = async (req, res, next) => {
   try {
-    const { title, description, priority, boardId, columnId } = req.body;
+    const { title, description, priority, boardId, columnId, date } = req.body;
 
     if (!mongoose.Types.ObjectId.isValid(boardId)) {
       return res.status(400).json({ message: 'Invalid boardId' });
@@ -61,7 +61,16 @@ export const createCardController = async (req, res, next) => {
       return res.status(400).json({ message: 'Invalid columnId' });
     }
 
-    const cardData = { title, description, priority, boardId, columnId };
+    // Додаємо поле date
+    const cardData = { 
+      title, 
+      description, 
+      priority, 
+      boardId, 
+      columnId, 
+      date: date ? new Date(date) : null // Перевірка і форматування дати
+    };
+
     const newCard = await Card.create(cardData);
     console.log('Created card:', newCard);
 
@@ -88,6 +97,7 @@ export const createCardController = async (req, res, next) => {
     next(error);
   }
 };
+
 
 
 export const deleteCardController = async (req, res, next) => {
