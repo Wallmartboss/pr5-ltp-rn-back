@@ -6,12 +6,10 @@ import { updateCard } from '../services/cards.js';
 
 export const getAllCardsController = async (req, res, next) => {
   try {
-
     const { boardId } = req.params; // отримуємо boardId та columnId з параметрів запиту
 
     // Шукаємо картки, що належать до зазначеної дошки та колонки
     const cards = await Card.find({ boardId });
-
 
     if (!cards || cards.length === 0) {
       throw createError(404, 'No cards found in this column');
@@ -27,9 +25,7 @@ export const getAllCardsController = async (req, res, next) => {
   }
 };
 
-
 export const getCardByIdController = async (req, res, next) => {
-
   try {
     const { boardId } = req.body;
     const { cardId } = req.params;
@@ -62,13 +58,13 @@ export const createCardController = async (req, res, next) => {
     }
 
     // Додаємо поле date
-    const cardData = { 
-      title, 
-      description, 
-      priority, 
-      boardId, 
-      columnId, 
-      date: date ? new Date(date) : null // Перевірка і форматування дати
+    const cardData = {
+      title,
+      description,
+      priority,
+      boardId,
+      columnId,
+      date: date ? new Date(date) : null, // Перевірка і форматування дати
     };
 
     const newCard = await Card.create(cardData);
@@ -78,7 +74,7 @@ export const createCardController = async (req, res, next) => {
       const updatedColumn = await Column.findByIdAndUpdate(
         columnId,
         { $push: { cards: newCard._id } },
-        { new: true }
+        { new: true },
       );
 
       if (!updatedColumn) {
@@ -98,8 +94,6 @@ export const createCardController = async (req, res, next) => {
   }
 };
 
-
-
 export const deleteCardController = async (req, res, next) => {
   try {
     const { cardId } = req.params;
@@ -118,32 +112,36 @@ export const updateCardController = async (req, res, next) => {
     const { cardId } = req.params;
     const { boardId, newColumnId, ...updateData } = req.body;
 
-    if (!mongoose.Types.ObjectId.isValid(cardId) || !mongoose.Types.ObjectId.isValid(boardId)) {
-      return res.status(400).json({ message: 'Invalid cardId or boardId format' });
+    if (
+      !mongoose.Types.ObjectId.isValid(cardId) ||
+      !mongoose.Types.ObjectId.isValid(boardId)
+    ) {
+      return res
+        .status(400)
+        .json({ message: 'Invalid cardId or boardId format' });
     }
 
     if (newColumnId) {
-      updateData.columnId = newColumnId;  
+      updateData.columnId = newColumnId;
     }
 
-    const updatedCard = await updateCard(cardId, boardId, updateData); 
+    const updatedCard = await updateCard(cardId, boardId, updateData);
 
     if (!updatedCard) {
       throw createError(404, 'Card not found');
     }
 
-
     if (newColumnId) {
       await Column.findByIdAndUpdate(
         updatedCard.columnId,
         { $pull: { cards: updatedCard._id } },
-        { new: true }
+        { new: true },
       );
 
       await Column.findByIdAndUpdate(
         newColumnId,
         { $push: { cards: updatedCard._id } },
-        { new: true }
+        { new: true },
       );
     }
 
@@ -157,30 +155,50 @@ export const updateCardController = async (req, res, next) => {
   }
 };
 
-
 export const moveCardController = async (req, res, next) => {
   try {
     const { cardId } = req.params;
-    const { columnId } = req.body;
+    const { columnId, newColumnId } = req.body;
 
-
-    if (!cardId || !columnId) {
+    if (!cardId || !columnId || !newColumnId) {
       return next(createError(400, 'Card ID and Column ID are required.'));
     }
+
+    if (
+      !mongoose.Types.ObjectId.isValid(cardId) ||
+      !mongoose.Types.ObjectId.isValid(columnId) ||
+      !mongoose.Types.ObjectId.isValid(newColumnId)
+    ) {
+      return next(createError(400, 'Invalid IDs format.'));
+    }
+
     const card = await Card.findById(cardId);
     if (!card) {
       return next(createError(404, 'Card not found.'));
     }
-    card.columnId = columnId;
+
+    // Удаляем карту из текущей колонки
+    await Column.findByIdAndUpdate(
+      columnId,
+      { $pull: { cards: card._id } },
+      { new: true },
+    );
+
+    // Обновляем columnId у карты
+    card.columnId = newColumnId;
     await card.save();
-    const targetColumn = await Column.findById(columnId);
+
+    // Добавляем карту в новую колонку
+    const targetColumn = await Column.findById(newColumnId);
     if (!targetColumn) {
       return next(createError(404, 'Target column not found.'));
     }
+
     if (!targetColumn.cards.includes(card._id)) {
       targetColumn.cards.push(card._id);
       await targetColumn.save();
     }
+
     res.status(200).json({
       message: 'Card moved successfully',
       card,
