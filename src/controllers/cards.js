@@ -6,9 +6,8 @@ import { updateCard } from '../services/cards.js';
 
 export const getAllCardsController = async (req, res, next) => {
   try {
-    const { boardId } = req.params; // отримуємо boardId та columnId з параметрів запиту
+    const { boardId } = req.params; 
 
-    // Шукаємо картки, що належать до зазначеної дошки та колонки
     const cards = await Card.find({ boardId });
 
     if (!cards || cards.length === 0) {
@@ -57,14 +56,13 @@ export const createCardController = async (req, res, next) => {
       return res.status(400).json({ message: 'Invalid columnId' });
     }
 
-    // Додаємо поле date
     const cardData = {
       title,
       description,
       priority,
       boardId,
       columnId,
-      date: date ? new Date(date) : null, // Перевірка і форматування дати
+      date: date ? new Date(date) : null, 
     };
 
     const newCard = await Card.create(cardData);
@@ -107,18 +105,19 @@ export const deleteCardController = async (req, res, next) => {
   }
 };
 
+
 export const updateCardController = async (req, res, next) => {
   try {
     const { cardId } = req.params;
     const { boardId, newColumnId, ...updateData } = req.body;
-
-    if (
-      !mongoose.Types.ObjectId.isValid(cardId) ||
-      !mongoose.Types.ObjectId.isValid(boardId)
-    ) {
-      return res
-        .status(400)
-        .json({ message: 'Invalid cardId or boardId format' });
+    console.log('req.params:', req.params);
+    console.log('req.body:', req.body);
+    
+    if (!mongoose.Types.ObjectId.isValid(cardId) || !mongoose.Types.ObjectId.isValid(boardId)) {
+      return res.status(400).json({ message: 'Invalid cardId or boardId format' });
+    }
+    if (newColumnId && !mongoose.Types.ObjectId.isValid(newColumnId)) {
+      return res.status(400).json({ message: 'Invalid newColumnId format' });
     }
 
     if (newColumnId) {
@@ -132,20 +131,11 @@ export const updateCardController = async (req, res, next) => {
     }
 
     if (newColumnId) {
-      await Column.findByIdAndUpdate(
-        updatedCard.columnId,
-        { $pull: { cards: updatedCard._id } },
-        { new: true },
-      );
-
-      await Column.findByIdAndUpdate(
-        newColumnId,
-        { $push: { cards: updatedCard._id } },
-        { new: true },
-      );
+      await Column.findByIdAndUpdate(updateData.columnId, { $pull: { cards: cardId } });
+      await Column.findByIdAndUpdate(newColumnId, { $push: { cards: updatedCard._id } }, { new: true });
     }
 
-    res.json({
+    return res.json({
       status: 200,
       message: `Successfully updated Card with id ${cardId}!`,
       data: updatedCard,
@@ -155,56 +145,3 @@ export const updateCardController = async (req, res, next) => {
   }
 };
 
-export const moveCardController = async (req, res, next) => {
-  try {
-    const { cardId } = req.params;
-    const { columnId, newColumnId } = req.body;
-
-    if (!cardId || !columnId || !newColumnId) {
-      return next(createError(400, 'Card ID and Column ID are required.'));
-    }
-
-    if (
-      !mongoose.Types.ObjectId.isValid(cardId) ||
-      !mongoose.Types.ObjectId.isValid(columnId) ||
-      !mongoose.Types.ObjectId.isValid(newColumnId)
-    ) {
-      return next(createError(400, 'Invalid IDs format.'));
-    }
-
-    const card = await Card.findById(cardId);
-    if (!card) {
-      return next(createError(404, 'Card not found.'));
-    }
-
-    // Удаляем карту из текущей колонки
-    await Column.findByIdAndUpdate(
-      columnId,
-      { $pull: { cards: card._id } },
-      { new: true },
-    );
-
-    // Обновляем columnId у карты
-    card.columnId = newColumnId;
-    await card.save();
-
-    // Добавляем карту в новую колонку
-    const targetColumn = await Column.findById(newColumnId);
-    if (!targetColumn) {
-      return next(createError(404, 'Target column not found.'));
-    }
-
-    if (!targetColumn.cards.includes(card._id)) {
-      targetColumn.cards.push(card._id);
-      await targetColumn.save();
-    }
-
-    res.status(200).json({
-      message: 'Card moved successfully',
-      card,
-    });
-  } catch (error) {
-    console.error('Error while moving card:', error);
-    next(error);
-  }
-};
