@@ -2,11 +2,12 @@ import createError from 'http-errors';
 import { Card } from '../db/cards.js';
 import { Column } from '../db/columnSchema.js';
 import mongoose from 'mongoose';
-import { updateCard } from '../services/cards.js';
+import { moveCard, updateCard } from '../services/cards.js';
+
 
 export const getAllCardsController = async (req, res, next) => {
   try {
-    const { boardId } = req.params; 
+    const { boardId } = req.params;
 
     const cards = await Card.find({ boardId });
 
@@ -62,7 +63,7 @@ export const createCardController = async (req, res, next) => {
       priority,
       boardId,
       columnId,
-      date: date ? new Date(date) : null, 
+      date: date ? new Date(date) : null,
     };
 
     const newCard = await Card.create(cardData);
@@ -112,7 +113,7 @@ export const updateCardController = async (req, res, next) => {
     const { boardId, newColumnId, ...updateData } = req.body;
     console.log('req.params:', req.params);
     console.log('req.body:', req.body);
-    
+
     if (!mongoose.Types.ObjectId.isValid(cardId) || !mongoose.Types.ObjectId.isValid(boardId)) {
       return res.status(400).json({ message: 'Invalid cardId or boardId format' });
     }
@@ -145,3 +146,25 @@ export const updateCardController = async (req, res, next) => {
   }
 };
 
+
+
+export const moveCardController = async (req, res, next) => {
+  try {
+    const { cardId } = req.params;
+    const { newColumnId, boardId } = req.body;
+
+    if (!cardId || !newColumnId || !boardId) {
+      return res.status(400).json({ message: 'Missing required fields' });
+    }
+
+    const updatedCard = await moveCard(cardId, newColumnId, boardId);
+
+    res.json({
+      status: 200,
+      message: `Card with ID ${cardId} successfully moved to column ${newColumnId}`,
+      data: updatedCard,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
